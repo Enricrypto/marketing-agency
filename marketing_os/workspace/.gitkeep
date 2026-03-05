@@ -1,0 +1,7 @@
+# Carpeta reservada para scripts de integración con Google Workspace (Phase 3)
+# Archivos a agregar aquí:
+#   - credentials.json  (OAuth2 de Google Cloud Console)
+#   - token.json        (se genera automáticamente tras autenticar)
+#   - docs_client.py    (cliente para Google Docs)
+#   - sheets_client.py  (cliente para Google Sheets)
+#   - drive_client.py   (cliente para Google Drive)

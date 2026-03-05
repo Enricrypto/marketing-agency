@@ -1,0 +1,152 @@
+{
+  "_comment": "Configuración de los 23 agentes del Marketing OS. output_type define el destino por defecto.",
+  "_roles": {
+    "contenido": ["copywriting", "copy-editing", "email-sequence", "social-content"],
+    "cro": ["page-cro", "signup-flow-cro", "onboarding-cro", "form-cro", "popup-cro", "paywall-upgrade-cro"],
+    "seo": ["seo-audit", "programmatic-seo", "competitor-alternatives", "schema-markup"],
+    "ads": ["paid-ads"],
+    "growth": ["referral-program", "free-tool-strategy", "launch-strategy"],
+    "estrategia": ["marketing-ideas", "marketing-psychology", "pricing-strategy", "ab-test-setup"],
+    "analitica": ["analytics-tracking"]
+  },
+  "agents": {
+    "ab-test-setup": {
+      "role": "estrategia",
+      "responsibility": "Diseñar hipótesis, variantes y plan de medición para experimentos A/B",
+      "output_type": "doc",
+      "output_description": "Plan de experimento con hipótesis, variantes y métricas de éxito"
+    },
+    "analytics-tracking": {
+      "role": "analitica",
+      "responsibility": "Configurar eventos, objetivos y reportes de analítica digital",
+      "output_type": "sheet",
+      "output_description": "Tabla de eventos, propiedades y configuración de GA4/GTM"
+    },
+    "competitor-alternatives": {
+      "role": "seo",
+      "responsibility": "Crear páginas de comparación y alternativas para SEO y ventas",
+      "output_type": "doc",
+      "output_description": "Página tipo 'X vs Y' o 'Alternativas a X' con estructura SEO"
+    },
+    "copy-editing": {
+      "role": "contenido",
+      "responsibility": "Revisar, corregir y mejorar copy existente de páginas o emails",
+      "output_type": "doc",
+      "output_description": "Copy editado con comentarios de mejora y versión final"
+    },
+    "copywriting": {
+      "role": "contenido",
+      "responsibility": "Escribir o reescribir copy para landing pages, homepage, pricing y features",
+      "output_type": "doc",
+      "output_description": "Copy completo con headline, subheadline, cuerpo y CTA"
+    },
+    "email-sequence": {
+      "role": "contenido",
+      "responsibility": "Crear secuencias de email automatizadas: bienvenida, nurture, reactivación",
+      "output_type": "doc",
+      "output_description": "Secuencia de N emails con asunto, cuerpo y CTA por email"
+    },
+    "form-cro": {
+      "role": "cro",
+      "responsibility": "Optimizar formularios de captura de leads, contacto y checkout",
+      "output_type": "doc",
+      "output_description": "Análisis de fricciones + recomendaciones de campos y copy"
+    },
+    "free-tool-strategy": {
+      "role": "growth",
+      "responsibility": "Planificar herramientas gratuitas para generación de leads y SEO",
+      "output_type": "doc",
+      "output_description": "Plan de herramienta con propósito, funcionalidad y estrategia de distribución"
+    },
+    "launch-strategy": {
+      "role": "growth",
+      "responsibility": "Planificar lanzamientos de producto, features y campañas de pre-lanzamiento",
+      "output_type": "doc",
+      "output_description": "Plan de lanzamiento por fases con canales, mensajes y calendario"
+    },
+    "marketing-ideas": {
+      "role": "estrategia",
+      "responsibility": "Generar ideas de marketing personalizadas para el negocio actual",
+      "output_type": "sheet",
+      "output_description": "Lista priorizada de ideas con canal, dificultad e impacto esperado"
+    },
+    "marketing-psychology": {
+      "role": "estrategia",
+      "responsibility": "Aplicar principios de psicología y sesgo cognitivo al copy y diseño",
+      "output_type": "doc",
+      "output_description": "Análisis con principios aplicables y ejemplos concretos para el negocio"
+    },
+    "onboarding-cro": {
+      "role": "cro",
+      "responsibility": "Mejorar la activación y primera experiencia de usuarios nuevos",
+      "output_type": "doc",
+      "output_description": "Flujo de onboarding optimizado con pasos, mensajes y momentos AHA"
+    },
+    "page-cro": {
+      "role": "cro",
+      "responsibility": "Optimizar conversiones en cualquier página de marketing",
+      "output_type": "doc",
+      "output_description": "Auditoría de página con problemas detectados y recomendaciones priorizadas"
+    },
+    "paid-ads": {
+      "role": "ads",
+      "responsibility": "Crear y optimizar campañas de Google Ads, Meta Ads y LinkedIn Ads",
+      "output_type": "sheet",
+      "output_description": "Tabla de anuncios con títulos, descripciones, audiencias y copy por plataforma"
+    },
+    "paywall-upgrade-cro": {
+      "role": "cro",
+      "responsibility": "Diseñar paywalls, pantallas de upgrade y gates de features in-app",
+      "output_type": "doc",
+      "output_description": "Copy y estructura de la pantalla de upgrade con argumentos de valor"
+    },
+    "popup-cro": {
+      "role": "cro",
+      "responsibility": "Crear y optimizar popups, modales y overlays de conversión",
+      "output_type": "doc",
+      "output_description": "Copy y flujo del popup con trigger, headline, CTA y condiciones de cierre"
+    },
+    "pricing-strategy": {
+      "role": "estrategia",
+      "responsibility": "Diseñar estrategia de precios, tiers y empaquetamiento de producto",
+      "output_type": "doc",
+      "output_description": "Estructura de precios con tiers, features por plan y argumento de valor"
+    },
+    "programmatic-seo": {
+      "role": "seo",
+      "responsibility": "Planificar y generar páginas SEO a escala con templates y datos",
+      "output_type": "sheet",
+      "output_description": "Lista de URLs, títulos, meta descriptions y variables por template"
+    },
+    "referral-program": {
+      "role": "growth",
+      "responsibility": "Diseñar programas de referidos y afiliados con incentivos y mecánicas virales",
+      "output_type": "doc",
+      "output_description": "Diseño del programa con incentivos, copy de invitación y flujo de referido"
+    },
+    "schema-markup": {
+      "role": "seo",
+      "responsibility": "Generar JSON-LD de schema markup para rich snippets en buscadores",
+      "output_type": "doc",
+      "output_description": "Código JSON-LD listo para insertar en el HTML de la página"
+    },
+    "seo-audit": {
+      "role": "seo",
+      "responsibility": "Auditar problemas técnicos y on-page de SEO en un sitio web",
+      "output_type": "sheet",
+      "output_description": "Tabla de problemas SEO con prioridad, descripción y acción recomendada"
+    },
+    "signup-flow-cro": {
+      "role": "cro",
+      "responsibility": "Optimizar flujos de registro y creación de cuenta para reducir fricción",
+      "output_type": "doc",
+      "output_description": "Análisis del flujo actual con pasos a eliminar, copy mejorado y wireframe textual"
+    },
+    "social-content": {
+      "role": "contenido",
+      "responsibility": "Crear posts para LinkedIn, Instagram, Twitter/X y TikTok",
+      "output_type": "doc",
+      "output_description": "Post completo con texto, hashtags y sugerencia de formato visual"
+    }
+  }
+}

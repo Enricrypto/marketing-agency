@@ -1,0 +1,211 @@
+{
+  "_comment": "Phase 5 — Configuración de scheduling y control de presupuesto",
+  "budget": {
+    "monthly_usd": 20.00,
+    "weeks_per_month": 4,
+    "weekly_budget_usd": 5.00,
+    "alert_threshold_pct": 80
+  },
+  "model_defaults": {
+    "critical":   "claude-opus-4-6",
+    "important":  "claude-sonnet-4-6",
+    "support":    "claude-haiku-4-5"
+  },
+  "schedule": {
+    "copywriting": {
+      "priority": "critical",
+      "frequency": "weekly",
+      "days": ["tuesday"],
+      "batch_size": 2,
+      "task_template": "Genera {batch_size} piezas de copy para el negocio en Santiago: blog posts, landing o sección de página según necesidad.",
+      "output_type": "doc"
+    },
+    "social-content": {
+      "priority": "critical",
+      "frequency": "weekly",
+      "days": ["wednesday"],
+      "batch_size": 5,
+      "task_template": "Genera {batch_size} posts para redes sociales (Instagram, LinkedIn) para el negocio. Tono cercano, audiencia Santiago.",
+      "output_type": "doc"
+    },
+    "analytics-tracking": {
+      "priority": "critical",
+      "frequency": "weekly",
+      "days": ["monday"],
+      "batch_size": 1,
+      "task_template": "Genera plan de eventos y métricas semanales para el negocio. Incluye GA4 y conversiones clave.",
+      "output_type": "sheet"
+    },
+    "email-sequence": {
+      "priority": "critical",
+      "frequency": "weekly",
+      "days": ["friday"],
+      "batch_size": 1,
+      "task_template": "Crea o actualiza una secuencia de email para el negocio. Enfoque en activación o nurture.",
+      "output_type": "doc"
+    },
+    "paid-ads": {
+      "priority": "critical",
+      "frequency": "weekly",
+      "days": ["thursday"],
+      "batch_size": 3,
+      "task_template": "Genera {batch_size} variantes de anuncios para Google Ads y Meta Ads. Audiencia Santiago.",
+      "output_type": "sheet"
+    },
+    "seo-audit": {
+      "priority": "important",
+      "frequency": "biweekly",
+      "days": ["monday"],
+      "weeks": [1, 3],
+      "batch_size": 1,
+      "task_template": "Audita los principales problemas SEO del sitio. Prioriza issues técnicos y on-page.",
+      "output_type": "sheet"
+    },
+    "page-cro": {
+      "priority": "important",
+      "frequency": "biweekly",
+      "days": ["thursday"],
+      "weeks": [1, 3],
+      "batch_size": 1,
+      "task_template": "Optimiza la landing page principal o la página con menor conversión del negocio.",
+      "output_type": "doc"
+    },
+    "ab-test-setup": {
+      "priority": "important",
+      "frequency": "biweekly",
+      "days": ["friday"],
+      "weeks": [2, 4],
+      "batch_size": 1,
+      "task_template": "Diseña 1-2 experimentos A/B para la página o flujo con más oportunidad de mejora.",
+      "output_type": "doc"
+    },
+    "form-cro": {
+      "priority": "important",
+      "frequency": "biweekly",
+      "days": ["thursday"],
+      "weeks": [2, 4],
+      "batch_size": 1,
+      "task_template": "Optimiza el formulario principal del sitio. Reduce fricción y mejora tasa de conversión.",
+      "output_type": "doc"
+    },
+    "popup-cro": {
+      "priority": "important",
+      "frequency": "biweekly",
+      "days": ["wednesday"],
+      "weeks": [2, 4],
+      "batch_size": 1,
+      "task_template": "Crea o mejora el popup principal del sitio. Exit intent o captura de email.",
+      "output_type": "doc"
+    },
+    "schema-markup": {
+      "priority": "important",
+      "frequency": "biweekly",
+      "days": ["tuesday"],
+      "weeks": [2, 4],
+      "batch_size": 1,
+      "task_template": "Genera schema markup JSON-LD para las páginas principales del sitio.",
+      "output_type": "doc"
+    },
+    "marketing-ideas": {
+      "priority": "support",
+      "frequency": "monthly",
+      "days": ["saturday"],
+      "weeks": [1],
+      "batch_size": 5,
+      "task_template": "Genera {batch_size} ideas de marketing accionables para el negocio en Santiago este mes.",
+      "output_type": "sheet"
+    },
+    "launch-strategy": {
+      "priority": "support",
+      "frequency": "monthly",
+      "days": ["saturday"],
+      "weeks": [2],
+      "batch_size": 1,
+      "task_template": "Planifica el próximo lanzamiento o anuncio del negocio con estrategia por fases.",
+      "output_type": "doc"
+    },
+    "pricing-strategy": {
+      "priority": "support",
+      "frequency": "monthly",
+      "days": ["saturday"],
+      "weeks": [3],
+      "batch_size": 1,
+      "task_template": "Analiza y propone mejoras a la estructura de precios y tiers del negocio.",
+      "output_type": "doc"
+    },
+    "competitor-alternatives": {
+      "priority": "support",
+      "frequency": "monthly",
+      "days": ["saturday"],
+      "weeks": [4],
+      "batch_size": 3,
+      "task_template": "Crea estructura para {batch_size} páginas de comparación con competidores clave.",
+      "output_type": "sheet"
+    },
+    "onboarding-cro": {
+      "priority": "support",
+      "frequency": "monthly",
+      "days": ["saturday"],
+      "weeks": [1],
+      "batch_size": 1,
+      "task_template": "Mejora el flujo de onboarding y primera experiencia de usuarios nuevos.",
+      "output_type": "doc"
+    },
+    "marketing-psychology": {
+      "priority": "support",
+      "frequency": "on-demand",
+      "days": [],
+      "batch_size": 1,
+      "task_template": "Aplica principios de psicología del comportamiento al copy y diseño del sitio.",
+      "output_type": "doc"
+    },
+    "referral-program": {
+      "priority": "support",
+      "frequency": "on-demand",
+      "days": [],
+      "batch_size": 1,
+      "task_template": "Diseña un programa de referidos con incentivos y mecánicas para el negocio.",
+      "output_type": "doc"
+    },
+    "free-tool-strategy": {
+      "priority": "support",
+      "frequency": "on-demand",
+      "days": [],
+      "batch_size": 1,
+      "task_template": "Planifica una herramienta gratuita de marketing para generación de leads y SEO.",
+      "output_type": "doc"
+    },
+    "paywall-upgrade-cro": {
+      "priority": "support",
+      "frequency": "on-demand",
+      "days": [],
+      "batch_size": 1,
+      "task_template": "Diseña pantalla de upgrade o paywall para el producto. Maximiza conversión.",
+      "output_type": "doc"
+    },
+    "signup-flow-cro": {
+      "priority": "support",
+      "frequency": "on-demand",
+      "days": [],
+      "batch_size": 1,
+      "task_template": "Optimiza el flujo de registro. Reduce pasos y fricciones para aumentar activaciones.",
+      "output_type": "doc"
+    },
+    "programmatic-seo": {
+      "priority": "support",
+      "frequency": "on-demand",
+      "days": [],
+      "batch_size": 1,
+      "task_template": "Planifica estrategia de páginas SEO a escala con templates y variables de localización.",
+      "output_type": "sheet"
+    },
+    "copy-editing": {
+      "priority": "support",
+      "frequency": "on-demand",
+      "days": [],
+      "batch_size": 1,
+      "task_template": "Revisa y mejora el copy existente del sitio o email proporcionado.",
+      "output_type": "doc"
+    }
+  }
+}

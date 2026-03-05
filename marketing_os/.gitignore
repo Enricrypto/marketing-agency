@@ -1,0 +1,55 @@
+# ── Entorno virtual Python ────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Archivos compilados de Python ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# ── Variables de entorno y secretos ───────────────────────────────────────────
+# NUNCA subir claves de API, tokens OAuth ni credenciales a Git
+.env
+*.env
+.env.*
+
+# Token OAuth de Google (se genera automáticamente en el primer login)
+workspace/.token.json
+
+# Credenciales OAuth de Google Cloud Console (archivo descargado manualmente)
+workspace/credentials.json
+
+# Credenciales de Service Account (si se usa en flujos alternativos)
+workspace/service_account.json
+*.json.key
+
+# ── Outputs generados por el sistema ──────────────────────────────────────────
+# Los outputs son artefactos temporales — no versionar
+outputs/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Archivos del sistema operativo ────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Editores de código ────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Pytest y cobertura ────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ── Build / distribución ──────────────────────────────────────────────────────
+dist/
+build/
+*.egg-info/
