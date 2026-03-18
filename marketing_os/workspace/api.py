@@ -38,6 +38,10 @@ _SCOPES = [
     "https://www.googleapis.com/auth/documents",
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/analytics.readonly",
+    "https://www.googleapis.com/auth/webmasters",          # full access — needed for sitemap submission
+    "https://www.googleapis.com/auth/business.manage",     # Google Business Profile API
+    "https://www.googleapis.com/auth/indexing",            # Web Search Indexing API — request URL indexing
 ]
 
 
@@ -312,3 +316,118 @@ def _move_to_folder(file_id: str, folder_id: str) -> None:
         removeParents=current_parents,
         fields="id, parents",
     ).execute()
+
+
+# ──────────────────────────────────────────────
+# GOOGLE BUSINESS PROFILE
+# ──────────────────────────────────────────────
+
+def _gbp_accounts():
+    """Google Business Profile — Account Management API."""
+    return build(
+        "mybusinessaccountmanagement", "v1",
+        credentials=_get_credentials(),
+        discoveryServiceUrl="https://mybusinessaccountmanagement.googleapis.com/$discovery/rest?version=v1",
+        static_discovery=False,
+    )
+
+
+def _gbp_posts(account_name: str, location_name: str):
+    """Google Business Profile — Posts API (scoped to a location)."""
+    return build(
+        "mybusinessposts", "v1",
+        credentials=_get_credentials(),
+        discoveryServiceUrl="https://mybusinessposts.googleapis.com/$discovery/rest?version=v1",
+        static_discovery=False,
+    )
+
+
+def _gbp_info():
+    """Google Business Profile — Business Information API."""
+    return build(
+        "mybusinessbusinessinformation", "v1",
+        credentials=_get_credentials(),
+        discoveryServiceUrl="https://mybusinessbusinessinformation.googleapis.com/$discovery/rest?version=v1",
+        static_discovery=False,
+    )
+
+
+def gbp_get_location() -> tuple[str, str]:
+    """
+    Returns (account_name, location_name) for the first GBP location found.
+    Caches result in env var GBP_LOCATION_NAME / GBP_ACCOUNT_NAME.
+
+    Example:
+        account_name  = "accounts/123456789"
+        location_name = "accounts/123456789/locations/987654321"
+    """
+    cached_loc     = os.environ.get("GBP_LOCATION_NAME", "")
+    cached_account = os.environ.get("GBP_ACCOUNT_NAME", "")
+    if cached_loc and cached_account:
+        return cached_account, cached_loc
+
+    svc = _gbp_accounts()
+    accounts = svc.accounts().list().execute().get("accounts", [])
+    if not accounts:
+        raise RuntimeError("[GBP] No se encontraron cuentas de Google Business Profile.")
+
+    account_name = accounts[0]["name"]
+    print(f"[GBP] Cuenta: {account_name}")
+
+    info_svc   = _gbp_info()
+    locations  = info_svc.locations().list(
+        parent=account_name,
+        readMask="name,title",
+    ).execute().get("locations", [])
+
+    if not locations:
+        raise RuntimeError(f"[GBP] No se encontraron ubicaciones para {account_name}.")
+
+    location_name = locations[0]["name"]
+    print(f"[GBP] Ubicación: {location_name} — {locations[0].get('title', '')}")
+    return account_name, location_name
+
+
+def gbp_create_post(
+    text: str,
+    call_to_action_type: str = "LEARN_MORE",
+    cta_url: str | None = None,
+    location_name: str | None = None,
+) -> dict:
+    """
+    Publica un post en Google Business Profile.
+
+    Args:
+        text:                 Texto del post (máx 1,500 caracteres).
+        call_to_action_type:  "LEARN_MORE" | "BOOK" | "ORDER" | "CALL" | None
+        cta_url:              URL para el botón CTA (si aplica).
+        location_name:        "accounts/xxx/locations/yyy" — si None, auto-detecta.
+
+    Returns:
+        Respuesta de la API con el post creado.
+    """
+    if location_name is None:
+        _, location_name = gbp_get_location()
+
+    text = text[:1500]  # GBP limit
+
+    post_body: dict = {
+        "languageCode": "es",
+        "summary":      text,
+        "topicType":    "STANDARD",
+    }
+
+    if call_to_action_type and cta_url:
+        post_body["callToAction"] = {
+            "actionType": call_to_action_type,
+            "url":        cta_url,
+        }
+
+    svc    = _gbp_posts(location_name, location_name)
+    result = svc.locations().localPosts().create(
+        parent=location_name,
+        body=post_body,
+    ).execute()
+
+    print(f"[GBP] Post publicado: {result.get('name', '')}")
+    return result
