@@ -1,0 +1,9 @@
+{
+  "rate": 1.0,
+  "indexed": 10,
+  "checked": 10,
+  "below_threshold": false,
+  "threshold": 0.6,
+  "checked_at": "2026-03-13T10:01:09.017900",
+  "cached": false
+}

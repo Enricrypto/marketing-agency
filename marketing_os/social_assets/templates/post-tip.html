@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>WashDog — Template: Dog Tip</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a1f24;
+      --yellow:  #facc15;
+      --bg:      #F6F8F9;
+      --peach:   #F5BEA6;
+      --green:   #BFD8C2;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #e5e7eb;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 40px; padding: 60px 40px;
+    }
+    .label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: #6b7280; align-self: flex-start;
+    }
+
+    /* ── Single 1080x1080 post ── */
+    .post {
+      width: 540px; height: 540px; /* 50% scale for screen preview */
+      background: var(--primary);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    /* Yellow top bar */
+    .post::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 5px;
+      background: var(--yellow);
+    }
+
+    /* Blob decoration */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+    }
+    .blob-1 {
+      width: 300px; height: 300px;
+      background: rgba(250,204,21,0.06);
+      top: -80px; right: -80px;
+    }
+    .blob-2 {
+      width: 200px; height: 200px;
+      background: rgba(191,216,194,0.06);
+      bottom: -60px; left: -60px;
+    }
+
+    .post-inner {
+      flex: 1; padding: 44px 48px;
+      display: flex; flex-direction: column;
+      position: relative; z-index: 1;
+    }
+
+    .eyebrow {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--yellow); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .eyebrow::before {
+      content: ''; display: inline-block;
+      width: 16px; height: 2px; background: var(--yellow);
+    }
+
+    .tip-number {
+      font-size: 72px; font-weight: 800;
+      color: rgba(255,255,255,0.05);
+      line-height: 1; position: absolute;
+      top: 30px; right: 44px;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      font-size: 30px; font-weight: 800;
+      color: white; line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      max-width: 360px;
+    }
+
+    h2 span { color: var(--yellow); }
+
+    .tip-body {
+      font-size: 14.5px; font-weight: 400;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.65;
+      flex: 1;
+      max-width: 380px;
+    }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-size: 12px; font-weight: 700;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.08em;
+    }
+
+    .save-cta {
+      background: rgba(250,204,21,0.12);
+      color: var(--yellow);
+      font-size: 11px; font-weight: 700;
+      padding: 7px 14px; border-radius: 100px;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Carousel slide indicator ── */
+    .slide-dots {
+      display: flex; gap: 5px;
+      margin-top: 14px; justify-content: center;
+    }
+    .dot {
+      width: 22px; height: 3px; border-radius: 2px;
+      background: rgba(255,255,255,0.15);
+    }
+    .dot.active { background: var(--yellow); }
+
+    /* ── Carousel: subsequent slides ── */
+    .post.slide-2 { background: var(--bg); }
+    .post.slide-2 h2 { color: var(--primary); }
+    .post.slide-2 .tip-body { color: rgba(26,31,36,0.65); }
+    .post.slide-2 .eyebrow { color: var(--primary); opacity: 0.5; }
+    .post.slide-2 .eyebrow::before { background: var(--primary); opacity: 0.5; }
+    .post.slide-2 .footer { border-top-color: rgba(26,31,36,0.08); }
+    .post.slide-2 .brand { color: rgba(26,31,36,0.3); }
+    .post.slide-2 .save-cta { background: var(--primary); color: var(--yellow); }
+    .post.slide-2 .dot { background: rgba(26,31,36,0.12); }
+    .post.slide-2 .blob-1 { background: rgba(26,31,36,0.04); }
+    .post.slide-2 .blob-2 { background: rgba(143,187,217,0.15); }
+
+    /* CTA slide */
+    .post.slide-cta { background: var(--yellow); }
+    .post.slide-cta h2 { color: var(--primary); font-size: 34px; }
+    .post.slide-cta .tip-body { color: rgba(26,31,36,0.6); }
+    .post.slide-cta .eyebrow { color: var(--primary); opacity: 0.5; }
+    .post.slide-cta .eyebrow::before { background: var(--primary); opacity: 0.5; }
+    .post.slide-cta .footer { border-top-color: rgba(26,31,36,0.1); }
+    .post.slide-cta .brand { color: rgba(26,31,36,0.4); }
+    .post.slide-cta .cta-box {
+      background: var(--primary); color: white;
+      font-size: 13px; font-weight: 700;
+      padding: 12px 20px; border-radius: 12px;
+      line-height: 1.4; margin-top: 16px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="label">Template 1 — Dog Tip Carousel (3 slides)</div>
+
+<!-- Slide 1: Hook -->
+<div class="post">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="post-inner">
+    <div class="eyebrow">Tip de la semana</div>
+    <div class="tip-number">01</div>
+    <h2>¿Sabías que el pavimento puede <span>quemar las patas</span> de tu perro?</h2>
+    <p class="tip-body">
+      En verano, el asfalto de Santiago puede superar los 60°C. Una regla rápida: si no puedes apoyar tu mano 5 segundos, tu perro tampoco debería caminar ahí.
+    </p>
+    <div class="footer">
+      <span class="brand">WASHDOG</span>
+      <span class="save-cta">Guarda este tip</span>
+    </div>
+  </div>
+  <div class="slide-dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</div>
+
+<!-- Slide 2: Detail -->
+<div class="post slide-2">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="post-inner">
+    <div class="eyebrow">Tip de la semana</div>
+    <h2>Cómo proteger sus patas <span style="color:var(--primary)">en tres pasos</span></h2>
+    <p class="tip-body">
+      1. Pasea temprano (antes de las 9am) o tarde (después de las 7pm)<br><br>
+      2. Elige veredas con sombra o pasto siempre que puedas<br><br>
+      3. Revisa sus almohadillas después de cada paseo — busca enrojecimiento o grietas
+    </p>
+    <div class="footer">
+      <span class="brand">WASHDOG</span>
+      <span class="save-cta">Desliza →</span>
+    </div>
+  </div>
+  <div class="slide-dots">
+    <div class="dot"></div>
+    <div class="dot active"></div>
+    <div class="dot"></div>
+  </div>
+</div>
+
+<!-- Slide 3: CTA -->
+<div class="post slide-cta">
+  <div class="post-inner">
+    <div class="eyebrow">Cada semana un tip nuevo</div>
+    <h2>Recibe tips como este en el newsletter</h2>
+    <p class="tip-body">
+      Santiago a Cuatro Patas — la guía semanal para dueños de perros en Santiago. Gratis.
+    </p>
+    <div class="cta-box">
+      Suscríbete en washdog.cl/newsletter
+    </div>
+    <div class="footer" style="margin-top:auto;">
+      <span class="brand" style="color:rgba(26,31,36,0.4)">WASHDOG</span>
+    </div>
+  </div>
+  <div class="slide-dots">
+    <div class="dot" style="background:rgba(26,31,36,0.15)"></div>
+    <div class="dot" style="background:rgba(26,31,36,0.15)"></div>
+    <div class="dot active" style="background:var(--primary)"></div>
+  </div>
+</div>
+
+</body>
+</html>

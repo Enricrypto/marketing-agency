@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>WashDog Post — Dog Tip</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:#2F80ED; --yellow:#F2C94C; --aqua:#BEE9F7;
+      --charcoal:#1F2933; --white:#FFFFFF;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Inter',sans-serif;
+      background:#e2e8f0;
+      display:flex; flex-direction:column;
+      align-items:center; gap:32px; padding:60px 40px;
+    }
+    .label { font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#64748b; align-self:flex-start; }
+
+    /* ── 1080×1080 canvas at 50% = 540px ── */
+    .canvas {
+      width:540px; height:540px;
+      background:var(--charcoal);
+      position:relative; overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+
+    /* Bubble pattern */
+    .bubbles {
+      position:absolute; inset:0;
+      background-image:
+        radial-gradient(circle at 10% 15%, rgba(190,233,247,0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(47,128,237,0.1) 0%, transparent 40%),
+        radial-gradient(circle at 60% 30%, rgba(242,201,76,0.05) 0%, transparent 30%);
+    }
+    .bubble-rings {
+      position:absolute; inset:0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Ccircle cx='40' cy='40' r='30' fill='none' stroke='%232F80ED' stroke-opacity='0.05' stroke-width='2'/%3E%3Ccircle cx='140' cy='120' r='50' fill='none' stroke='%23BEE9F7' stroke-opacity='0.06' stroke-width='2'/%3E%3Ccircle cx='160' cy='30' r='20' fill='none' stroke='%23F2C94C' stroke-opacity='0.05' stroke-width='2'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* Top colored bar */
+    .top-bar {
+      height:6px; width:100%;
+      background:linear-gradient(90deg, var(--blue) 0%, var(--aqua) 60%, var(--yellow) 100%);
+      flex-shrink:0;
+    }
+
+    .inner {
+      flex:1; padding:40px 44px;
+      display:flex; flex-direction:column;
+      position:relative; z-index:1;
+    }
+
+    /* Category badge */
+    .badge {
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(242,201,76,0.15);
+      border:1px solid rgba(242,201,76,0.3);
+      color:var(--yellow);
+      font-family:'Inter',sans-serif; font-size:11px; font-weight:700;
+      letter-spacing:0.14em; text-transform:uppercase;
+      padding:6px 14px; border-radius:100px;
+      margin-bottom:20px;
+    }
+    .badge svg { width:14px; height:14px; }
+
+    h2 {
+      font-family:'Poppins',sans-serif;
+      font-size:30px; font-weight:800;
+      color:var(--white); line-height:1.2;
+      letter-spacing:-0.02em; margin-bottom:16px;
+      max-width:360px;
+    }
+    h2 em { color:var(--yellow); font-style:normal; }
+
+    .body-text {
+      font-size:14px; font-weight:400;
+      color:rgba(255,255,255,0.6); line-height:1.65;
+      flex:1; max-width:380px;
+    }
+
+    /* Save prompt */
+    .save-tag {
+      display:inline-flex; align-items:center; gap:6px;
+      background:rgba(47,128,237,0.15);
+      border:1px solid rgba(47,128,237,0.25);
+      color:var(--aqua); font-size:10.5px; font-weight:600;
+      padding:6px 14px; border-radius:100px;
+      margin-top:14px;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top:auto;
+      padding-top:16px;
+      border-top:1px solid rgba(255,255,255,0.07);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand {
+      font-family:'Poppins',sans-serif;
+      font-size:12px; font-weight:700;
+      color:rgba(255,255,255,0.25); letter-spacing:0.1em;
+    }
+    .hashtag { font-size:11px; color:rgba(47,128,237,0.6); font-weight:500; }
+
+    /* Paw deco */
+    .paw-deco {
+      position:absolute; right:36px; top:60px;
+      opacity:0.06;
+    }
+
+    /* ── Image placeholder variant ── */
+    .img-placeholder {
+      width:100%; height:140px;
+      background:rgba(47,128,237,0.08);
+      border:2px dashed rgba(47,128,237,0.2);
+      border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:16px; color:rgba(255,255,255,0.2);
+      font-size:12px; font-weight:600; letter-spacing:0.08em;
+      text-transform:uppercase;
+    }
+  </style>
+</head>
+<body>
+
+<div class="label">Template 1 — Dog Tip (post único 1080×1080)</div>
+
+<!-- Version A: text-heavy, no image -->
+<div class="canvas">
+  <div class="bubbles"></div>
+  <div class="bubble-rings"></div>
+  <div class="top-bar"></div>
+
+  <!-- Paw decoration -->
+  <svg class="paw-deco" width="160" height="160" viewBox="0 0 100 100" fill="white">
+    <ellipse cx="50" cy="65" rx="22" ry="18"/>
+    <ellipse cx="22" cy="44" rx="9" ry="12"/>
+    <ellipse cx="78" cy="44" rx="9" ry="12"/>
+    <ellipse cx="35" cy="26" rx="8" ry="10"/>
+    <ellipse cx="65" cy="26" rx="8" ry="10"/>
+  </svg>
+
+  <div class="inner">
+    <div class="badge">
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3">
+        <path d="M24 5 C16 5 9 12 9 21 C9 26 12 30 16 33 L16 38 Q16 40 18 40 L30 40 Q32 40 32 38 L32 33 C36 30 39 26 39 21 C39 12 32 5 24 5Z" stroke-linejoin="round"/>
+      </svg>
+      Tip de la semana
+    </div>
+
+    <h2>¿Sabías que el pavimento puede <em>quemar las patas</em> de tu perro?</h2>
+
+    <p class="body-text">
+      En verano, el asfalto en Santiago puede superar los 60°C. Una regla fácil: si no puedes apoyar tu mano durante 5 segundos, tu perro no debería caminar ahí.<br><br>
+      Prueba pasear temprano o cerca de áreas con sombra y pasto. Sus almohadillas te lo agradecerán.
+    </p>
+
+    <div class="save-tag">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      Guarda este tip
+    </div>
+
+    <div class="footer">
+      <span class="brand">WASHDOG</span>
+      <span class="hashtag">#PerrosSantiago #TipCanino</span>
+    </div>
+  </div>
+</div>
+
+<!-- Version B: with image placeholder -->
+<div class="label" style="margin-top:8px">Variante B — con imagen</div>
+<div class="canvas">
+  <div class="bubbles"></div>
+  <div class="top-bar"></div>
+  <div class="inner">
+    <div class="badge">Tip de la semana</div>
+    <div class="img-placeholder">Foto o ilustración aquí</div>
+    <h2 style="font-size:24px;margin-bottom:10px">Cuida las patas de tu perro <em>en verano</em></h2>
+    <p class="body-text" style="font-size:13px">
+      El pavimento caliente puede causar quemaduras. Camina temprano y elige zonas con sombra.
+    </p>
+    <div class="footer" style="margin-top:16px">
+      <span class="brand">WASHDOG</span>
+      <span class="hashtag">#PerrosSantiago</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

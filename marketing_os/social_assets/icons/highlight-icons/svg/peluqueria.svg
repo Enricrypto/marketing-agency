@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <circle cx="540" cy="540" r="540" fill="#2F80ED"/>
+  <circle cx="540" cy="540" r="380" fill="rgba(255,255,255,0.04)"/>
+  <!-- Scissors -->
+  <circle cx="270" cy="760" r="88" fill="none" stroke="white" stroke-width="38"/>
+  <circle cx="270" cy="300" r="88" fill="none" stroke="white" stroke-width="38"/>
+  <line x1="340" y1="692" x2="820" y2="222" stroke="white" stroke-width="38" stroke-linecap="round"/>
+  <line x1="340" y1="368" x2="820" y2="838" stroke="white" stroke-width="38" stroke-linecap="round"/>
+  <circle cx="800" cy="530" r="28" fill="white"/>
+</svg>

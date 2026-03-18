@@ -1,0 +1,602 @@
+{
+  "https://www.washdog.cl/": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/privacy": {
+    "indexed": false,
+    "coverage": "URL is unknown to Google",
+    "last_crawled": "",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/terms": {
+    "indexed": false,
+    "coverage": "URL is unknown to Google",
+    "last_crawled": "",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/auto-lavado-perros-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-05",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-06",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-06",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-05",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-gatos-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-06",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/precio-peluqueria-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-06",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/auto-lavado-perros-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-05",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/como-banar-perro-correctamente": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/como-cortar-pelo-perro": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/como-secar-perro-despues-bano": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/errores-banar-perro": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/frecuencia-bano-perros": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-05",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/peluqueria-canina-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-05",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/peluqueria-gatos-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-05",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/precio-peluqueria-canina-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-05",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/senales-corte-pelo-perro": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-05",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/blog/shampoo-correcto-perros": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-05",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/auto-lavado-perros": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-06",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-cerrillos": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-cerro-navia": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-estacion-central": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-huechuraba": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-independencia": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-la-cisterna": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-la-florida": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-la-granja": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-la-pintana": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-la-reina": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-las-condes": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-lo-barnechea": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-lo-espejo": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-lo-prado": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-macul": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-13",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-pedro-aguirre-cerda": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-penalolen": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-13",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-providencia": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-quilicura": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-quinta-normal": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-recoleta": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-13",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-renca": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-san-joaquin": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-san-miguel": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-san-ramon": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-santiago-centro": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-13",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros-vitacura": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-13",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/bano-perros": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-06",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-cerro-navia": {
+    "indexed": false,
+    "coverage": "URL is unknown to Google",
+    "last_crawled": "",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-huechuraba": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-independencia": {
+    "indexed": false,
+    "coverage": "Discovered - currently not indexed",
+    "last_crawled": "",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-la-florida": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-la-reina": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-las-condes": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-lo-barnechea": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-macul": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-nunoa": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-penalolen": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-providencia": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-14",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-quilicura": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-recoleta": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-santiago-centro": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros-vitacura": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-15",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/corte-perros": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-11",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/mejor-peluqueria-canina-santiago": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-09",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-cerrillos": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-cerro-navia": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-estacion-central": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-huechuraba": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-independencia": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-la-cisterna": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-la-florida": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-la-granja": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-la-pintana": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-13",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-la-reina": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-las-condes": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-09",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-lo-barnechea": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-lo-espejo": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-13",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-lo-prado": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-macul": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-pedro-aguirre-cerda": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-13",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-penalolen": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-providencia": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-quilicura": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-quinta-normal": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-recoleta": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-renca": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-san-joaquin": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-san-miguel": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-10",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-san-ramon": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-12",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-santiago-centro": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina-vitacura": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-canina": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-06",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/peluqueria-gatos": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-08",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/precio-peluqueria-canina-santiago": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-09",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/precio-peluqueria": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-06",
+    "checked_at": "2026-03-16"
+  },
+  "https://www.washdog.cl/servicios/spa-canino": {
+    "indexed": true,
+    "coverage": "Submitted and indexed",
+    "last_crawled": "2026-03-06",
+    "checked_at": "2026-03-16"
+  }
+}

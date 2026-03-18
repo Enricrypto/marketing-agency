@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>WashDog — Instagram Template Editor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root { --blue:#2F80ED; --yellow:#F2C94C; --aqua:#BEE9F7; --charcoal:#1F2933; --green:#22c55e; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:#0a0f1a; min-height:100vh; overflow:hidden; }
+    .app { display:flex; height:100vh; }
+
+    /* ── Sidebar ─────────────────────────────────────────────────── */
+    .sidebar { width:272px; background:#111827; border-right:1px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; flex-shrink:0; overflow:hidden; }
+    .sidebar-top { padding:20px 18px 16px; border-bottom:1px solid rgba(255,255,255,0.05); }
+    .sidebar-top .brand { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--yellow); margin-bottom:4px; }
+    .sidebar-top h1 { font-family:'Poppins',sans-serif; color:white; font-size:14px; font-weight:700; }
+    .sidebar-scroll { flex:1; overflow-y:auto; padding:16px 18px; display:flex; flex-direction:column; gap:20px; }
+    .sidebar-scroll::-webkit-scrollbar { width:3px; }
+    .sidebar-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08); border-radius:2px; }
+    .sidebar-bottom { padding:14px 18px 18px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:10px; }
+
+    .sec-label { font-size:9.5px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.25); margin-bottom:8px; }
+
+    /* Category tabs */
+    .cat-tabs { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+    .cat-btn { background:rgba(255,255,255,0.04); border:1.5px solid rgba(255,255,255,0.07); border-radius:9px; padding:8px 6px; cursor:pointer; text-align:center; transition:all 0.12s; }
+    .cat-btn:hover { background:rgba(47,128,237,0.1); border-color:rgba(47,128,237,0.3); }
+    .cat-btn.active { background:rgba(47,128,237,0.18); border-color:var(--blue); }
+    .cat-btn .icon { font-size:18px; margin-bottom:3px; }
+    .cat-btn .name { font-size:9.5px; font-weight:700; color:rgba(255,255,255,0.65); letter-spacing:0.04em; }
+
+    /* Style picker */
+    .style-grid { display:flex; flex-direction:column; gap:5px; }
+    .style-btn { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.03); border:1.5px solid rgba(255,255,255,0.06); border-radius:8px; padding:8px 10px; cursor:pointer; transition:all 0.12s; }
+    .style-btn:hover { background:rgba(47,128,237,0.08); border-color:rgba(47,128,237,0.25); }
+    .style-btn.active { background:rgba(47,128,237,0.15); border-color:var(--blue); }
+    .style-swatch { width:28px; height:28px; border-radius:6px; flex-shrink:0; }
+    .style-info .style-name { font-size:11px; font-weight:600; color:rgba(255,255,255,0.8); }
+    .style-info .style-desc { font-size:9.5px; color:rgba(255,255,255,0.3); margin-top:1px; }
+
+    /* Fields */
+    .fields { display:flex; flex-direction:column; gap:12px; }
+    .field label { display:block; font-size:9.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:5px; }
+    .field input, .field textarea { width:100%; background:rgba(255,255,255,0.04); border:1.5px solid rgba(255,255,255,0.07); border-radius:7px; padding:7px 9px; color:white; font-family:'Inter',sans-serif; font-size:11.5px; outline:none; resize:none; transition:border-color 0.12s; }
+    .field input:focus, .field textarea:focus { border-color:rgba(47,128,237,0.45); }
+    .field textarea { min-height:64px; line-height:1.5; }
+
+    /* Buttons */
+    .export-btn { background:var(--yellow); color:var(--charcoal); font-family:'Poppins',sans-serif; font-size:12px; font-weight:800; padding:11px; border-radius:9px; border:none; cursor:pointer; width:100%; transition:opacity 0.12s; }
+    .export-btn:hover { opacity:0.9; }
+    .hint { font-size:10px; color:rgba(255,255,255,0.2); text-align:center; line-height:1.5; }
+
+    /* ── Canvas ───────────────────────────────────────────────────── */
+    .canvas-area { flex:1; display:flex; align-items:center; justify-content:center; background:#0a0f1a; overflow:auto; padding:40px; }
+    .post-wrap { position:relative; }
+
+    /* ── BASE POST (540px = 50% of 1080px) ───────────────────────── */
+    .post { width:540px; height:540px; position:relative; overflow:hidden; display:flex; flex-direction:column; font-family:'Inter',sans-serif; }
+
+    /* ── Shared utilities ─────────────────────────────────────────── */
+    .top-bar-full { height:5px; width:100%; flex-shrink:0; }
+    .grad-rainbow { background:linear-gradient(90deg,var(--blue),var(--aqua),var(--yellow)); }
+    .grad-blue    { background:linear-gradient(90deg,var(--blue),#1a5ec8); }
+    .grad-yellow  { background:var(--yellow); }
+
+    .paw-abs { position:absolute; pointer-events:none; }
+    .bubbles-abs { position:absolute; inset:0; pointer-events:none; }
+
+    .badge-yd  { display:inline-flex; align-items:center; gap:5px; background:rgba(242,201,76,0.12); border:1px solid rgba(242,201,76,0.25); color:var(--yellow); font-size:9.5px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; padding:4px 11px; border-radius:100px; align-self:flex-start; }
+    .badge-bl  { background:rgba(47,128,237,0.12); border-color:rgba(47,128,237,0.25); color:var(--blue); }
+    .badge-wh  { background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.2); color:white; }
+    .badge-dk  { background:rgba(31,41,51,0.08); border-color:rgba(31,41,51,0.15); color:rgba(31,41,51,0.6); }
+
+    .brand-foot { font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+    .brand-dk   { color:rgba(31,41,51,0.2); }
+    .brand-lt   { color:rgba(255,255,255,0.2); }
+
+    /* Drop zone */
+    .drop-zone { cursor:pointer; position:relative; }
+    .drop-zone.over::after { content:'Suelta aquí'; position:absolute; inset:0; background:rgba(47,128,237,0.65); display:flex; align-items:center; justify-content:center; color:white; font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; z-index:20; border-radius:4px; }
+    .drop-hint-text { font-size:10px; font-weight:600; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.08em; text-align:center; line-height:1.6; }
+    .drop-hint-dk   { color:rgba(31,41,51,0.3); }
+
+    /* Photo fills */
+    .photo-fill { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+    .photo-fill-round { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; border-radius:50%; }
+
+    /* Export overlay */
+    #overlay { display:none; position:fixed; inset:0; background:rgba(10,15,26,0.92); z-index:1000; align-items:center; justify-content:center; flex-direction:column; gap:14px; }
+    #overlay.show { display:flex; }
+    #overlay p { color:white; font-size:13px; font-weight:600; }
+    .spinner { width:36px; height:36px; border:3px solid rgba(255,255,255,0.12); border-top-color:var(--yellow); border-radius:50%; animation:spin 0.7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ════════════════════════════════════════════════════════════════
+       TIP TEMPLATES
+    ════════════════════════════════════════════════════════════════ */
+
+    /* TIP-1: Dark charcoal */
+    .tip-1 { background:var(--charcoal); }
+    .tip-1 .inner { flex:1; padding:36px 40px; display:flex; flex-direction:column; position:relative; z-index:1; }
+    .tip-1 h2 { font-family:'Poppins',sans-serif; font-size:26px; font-weight:800; color:white; line-height:1.2; letter-spacing:-0.015em; margin-top:14px; margin-bottom:10px; }
+    .tip-1 h2 em { color:var(--yellow); font-style:normal; }
+    .tip-1 .body { font-size:13px; color:rgba(255,255,255,0.58); line-height:1.65; flex:1; }
+    .tip-1 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; }
+    .tip-1 .save-pill { background:rgba(47,128,237,0.15); border:1px solid rgba(47,128,237,0.25); color:var(--aqua); font-size:9px; font-weight:700; padding:5px 12px; border-radius:100px; }
+
+    /* TIP-2: Aqua light */
+    .tip-2 { background:#e8f7fd; }
+    .tip-2 .top-stripe { height:6px; background:linear-gradient(90deg,var(--blue),var(--aqua)); flex-shrink:0; }
+    .tip-2 .inner { flex:1; padding:32px 40px; display:flex; flex-direction:column; position:relative; }
+    .tip-2 .big-num { position:absolute; right:28px; top:16px; font-family:'Poppins',sans-serif; font-size:130px; font-weight:900; color:rgba(47,128,237,0.07); line-height:1; letter-spacing:-0.04em; pointer-events:none; }
+    .tip-2 h2 { font-family:'Poppins',sans-serif; font-size:26px; font-weight:800; color:var(--charcoal); line-height:1.2; letter-spacing:-0.015em; margin-top:14px; margin-bottom:10px; position:relative; z-index:1; }
+    .tip-2 h2 em { color:var(--blue); font-style:normal; }
+    .tip-2 .body { font-size:13px; color:rgba(31,41,51,0.6); line-height:1.65; flex:1; position:relative; z-index:1; }
+    .tip-2 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(47,128,237,0.1); display:flex; justify-content:space-between; align-items:center; }
+
+    /* TIP-3: Yellow accent side bar */
+    .tip-3 { background:white; display:flex; flex-direction:row !important; }
+    .tip-3 .side-bar { width:12px; background:var(--yellow); flex-shrink:0; }
+    .tip-3 .main { flex:1; padding:36px 36px 28px 32px; display:flex; flex-direction:column; }
+    .tip-3 h2 { font-family:'Poppins',sans-serif; font-size:24px; font-weight:800; color:var(--charcoal); line-height:1.2; letter-spacing:-0.015em; margin-top:12px; margin-bottom:12px; }
+    .tip-3 h2 em { color:var(--blue); font-style:normal; }
+    .tip-3 .body { font-size:13px; color:rgba(31,41,51,0.58); line-height:1.65; flex:1; }
+    .tip-3 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(31,41,51,0.06); display:flex; justify-content:space-between; align-items:center; }
+
+    /* TIP-4: Bold quote on dark blue */
+    .tip-4 { background:var(--blue); }
+    .tip-4 .inner { flex:1; padding:44px 44px 32px; display:flex; flex-direction:column; position:relative; z-index:1; }
+    .tip-4 .quote-mark { font-family:'Poppins',sans-serif; font-size:96px; font-weight:900; color:rgba(255,255,255,0.08); line-height:0.8; margin-bottom:-16px; }
+    .tip-4 h2 { font-family:'Poppins',sans-serif; font-size:30px; font-weight:800; color:white; line-height:1.2; letter-spacing:-0.02em; margin-bottom:14px; }
+    .tip-4 h2 em { color:var(--yellow); font-style:normal; }
+    .tip-4 .body { font-size:13px; color:rgba(255,255,255,0.55); line-height:1.65; flex:1; }
+    .tip-4 .foot { margin-top:auto; padding-top:14px; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; }
+
+    /* TIP-5: Minimal white */
+    .tip-5 { background:white; }
+    .tip-5 .top-dot { width:48px; height:6px; border-radius:3px; background:var(--yellow); margin:32px 0 0 40px; flex-shrink:0; }
+    .tip-5 .inner { flex:1; padding:20px 40px 32px; display:flex; flex-direction:column; }
+    .tip-5 h2 { font-family:'Poppins',sans-serif; font-size:28px; font-weight:800; color:var(--charcoal); line-height:1.15; letter-spacing:-0.02em; margin-top:12px; margin-bottom:14px; }
+    .tip-5 h2 em { background:var(--yellow); padding:0 4px; font-style:normal; border-radius:3px; }
+    .tip-5 .body { font-size:14px; color:rgba(31,41,51,0.6); line-height:1.7; flex:1; }
+    .tip-5 .foot { margin-top:auto; padding-top:14px; border-top:1px solid rgba(31,41,51,0.06); display:flex; justify-content:space-between; align-items:center; }
+
+    /* ════════════════════════════════════════════════════════════════
+       PARK TEMPLATES
+    ════════════════════════════════════════════════════════════════ */
+
+    /* PARK-1: Photo top */
+    .park-1 { background:#f0faff; }
+    .park-1 .photo { height:220px; flex-shrink:0; position:relative; overflow:hidden; background:linear-gradient(135deg,#a8d5b5,#7ecbdd); display:flex; align-items:center; justify-content:center; }
+    .park-1 .photo::before { content:''; position:absolute; top:0;left:0;right:0; height:4px; background:linear-gradient(90deg,var(--blue),var(--aqua),var(--green)); z-index:1; }
+    .park-1 .loc-badge { position:absolute; top:12px; left:12px; background:rgba(255,255,255,0.92); color:#16a34a; font-size:9px; font-weight:700; padding:5px 10px; border-radius:100px; letter-spacing:0.1em; text-transform:uppercase; z-index:2; }
+    .park-1 .content { flex:1; padding:16px 28px 20px; display:flex; flex-direction:column; }
+    .park-1 h2 { font-family:'Poppins',sans-serif; font-size:20px; font-weight:800; color:var(--charcoal); line-height:1.2; letter-spacing:-0.01em; margin-bottom:5px; }
+    .park-1 .meta { font-size:11px; color:rgba(31,41,51,0.4); margin-bottom:7px; }
+    .park-1 .body { font-size:12px; color:rgba(31,41,51,0.6); line-height:1.55; flex:1; }
+    .park-1 .chips { display:flex; gap:5px; flex-wrap:wrap; margin-top:7px; }
+    .park-1 .chip { background:rgba(47,128,237,0.08); color:var(--blue); font-size:9.5px; font-weight:600; padding:4px 9px; border-radius:100px; }
+    .park-1 .foot { margin-top:auto; padding-top:9px; border-top:1px solid rgba(31,41,51,0.06); display:flex; justify-content:space-between; }
+
+    /* PARK-2: Full bleed photo + overlay */
+    .park-2 { background:var(--charcoal); }
+    .park-2 .photo-bg { position:absolute; inset:0; background:linear-gradient(135deg,#3a7d5a,#2a5c8a); }
+    .park-2 .photo-bg img.photo-fill { opacity:0.55; }
+    .park-2 .overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(31,41,51,0.95) 0%, rgba(31,41,51,0.4) 50%, transparent 100%); }
+    .park-2 .content { position:absolute; bottom:0; left:0; right:0; padding:32px 36px; z-index:2; }
+    .park-2 h2 { font-family:'Poppins',sans-serif; font-size:28px; font-weight:800; color:white; line-height:1.15; letter-spacing:-0.015em; margin-bottom:8px; }
+    .park-2 .body { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.55; margin-bottom:12px; }
+    .park-2 .chips { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:14px; }
+    .park-2 .chip { background:rgba(255,255,255,0.1); color:white; font-size:9.5px; font-weight:600; padding:4px 9px; border-radius:100px; }
+    .park-2 .foot { display:flex; justify-content:space-between; align-items:center; }
+
+    /* PARK-3: Blue header card */
+    .park-3 { background:white; }
+    .park-3 .header { background:var(--blue); padding:28px 32px 24px; position:relative; overflow:hidden; flex-shrink:0; }
+    .park-3 .header::after { content:''; position:absolute; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.05); top:-60px; right:-60px; }
+    .park-3 .header h2 { font-family:'Poppins',sans-serif; font-size:24px; font-weight:800; color:white; line-height:1.2; letter-spacing:-0.015em; position:relative; z-index:1; }
+    .park-3 .header .meta { font-size:11px; color:rgba(255,255,255,0.5); margin-top:5px; position:relative; z-index:1; }
+    .park-3 .photo { height:160px; position:relative; overflow:hidden; background:linear-gradient(135deg,#a8d5b5,#7ecbdd); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .park-3 .content { flex:1; padding:16px 32px 20px; display:flex; flex-direction:column; }
+    .park-3 .body { font-size:12.5px; color:rgba(31,41,51,0.6); line-height:1.6; flex:1; }
+    .park-3 .chips { display:flex; gap:5px; flex-wrap:wrap; margin-top:8px; }
+    .park-3 .chip { background:rgba(34,197,94,0.1); color:#16a34a; font-size:9.5px; font-weight:600; padding:4px 9px; border-radius:100px; }
+    .park-3 .foot { margin-top:auto; padding-top:10px; border-top:1px solid rgba(31,41,51,0.06); display:flex; justify-content:space-between; }
+
+    /* PARK-4: Yellow header + map pin */
+    .park-4 { background:white; }
+    .park-4 .header { background:var(--yellow); padding:32px 36px 28px; }
+    .park-4 .header .eyebrow { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:rgba(31,41,51,0.5); margin-bottom:8px; }
+    .park-4 .header h2 { font-family:'Poppins',sans-serif; font-size:26px; font-weight:800; color:var(--charcoal); line-height:1.15; letter-spacing:-0.015em; }
+    .park-4 .header .meta { font-size:11px; color:rgba(31,41,51,0.5); margin-top:6px; }
+    .park-4 .photo { height:160px; position:relative; overflow:hidden; background:linear-gradient(135deg,#a8d5b5,#7ecbdd); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .park-4 .content { flex:1; padding:16px 36px 20px; display:flex; flex-direction:column; }
+    .park-4 .body { font-size:12.5px; color:rgba(31,41,51,0.6); line-height:1.6; flex:1; }
+    .park-4 .chips { display:flex; gap:5px; flex-wrap:wrap; margin-top:8px; }
+    .park-4 .chip { background:rgba(31,41,51,0.06); color:rgba(31,41,51,0.6); font-size:9.5px; font-weight:600; padding:4px 9px; border-radius:100px; }
+    .park-4 .foot { margin-top:auto; padding-top:10px; border-top:1px solid rgba(31,41,51,0.06); display:flex; justify-content:space-between; }
+
+    /* PARK-5: Dark + aqua photo circle */
+    .park-5 { background:var(--charcoal); }
+    .park-5 .inner { flex:1; padding:36px 40px; display:flex; flex-direction:column; position:relative; z-index:1; }
+    .park-5 .photo-circle-wrap { float:right; margin:0 0 16px 20px; }
+    .park-5 .photo-circle { width:150px; height:150px; border-radius:50%; overflow:hidden; position:relative; background:linear-gradient(135deg,#a8d5b5,#7ecbdd); border:4px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; }
+    .park-5 h2 { font-family:'Poppins',sans-serif; font-size:22px; font-weight:800; color:white; line-height:1.2; letter-spacing:-0.015em; margin-top:12px; margin-bottom:8px; }
+    .park-5 .meta { font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:10px; }
+    .park-5 .body { font-size:12.5px; color:rgba(255,255,255,0.55); line-height:1.6; }
+    .park-5 .chips { display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; }
+    .park-5 .chip { background:rgba(190,233,247,0.1); color:var(--aqua); font-size:9.5px; font-weight:600; padding:4px 9px; border-radius:100px; }
+    .park-5 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; clear:both; }
+
+    /* ════════════════════════════════════════════════════════════════
+       CLIENT TEMPLATES
+    ════════════════════════════════════════════════════════════════ */
+
+    /* CLIENT-1: Gradient top + circle */
+    .client-1 { background:#f8fafc; }
+    .client-1 .top { height:220px; position:relative; flex-shrink:0; overflow:hidden; }
+    .client-1 .top-bg { position:absolute; inset:0; background:linear-gradient(135deg,#2F80ED,#1a5ec8,#BEE9F7); }
+    .client-1 .ring-wrap { position:absolute; bottom:-52px; left:50%; transform:translateX(-50%); z-index:2; }
+    .client-1 .ring { width:130px; height:130px; border-radius:50%; padding:4px; background:linear-gradient(135deg,var(--yellow),#f29c4c); }
+    .client-1 .circle { width:100%; height:100%; border-radius:50%; overflow:hidden; position:relative; background:linear-gradient(135deg,#a8d5b5,#7ecbdd); border:4px solid white; display:flex; align-items:center; justify-content:center; }
+    .client-1 .b1 { position:absolute; top:16px; left:16px; width:50px; height:50px; border-radius:50%; border:2px solid rgba(255,255,255,0.12); }
+    .client-1 .b2 { position:absolute; top:28px; right:24px; width:70px; height:70px; border-radius:50%; border:2px solid rgba(255,255,255,0.08); }
+    .client-1 .content { flex:1; padding:60px 32px 16px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+    .client-1 .dog-name { font-family:'Poppins',sans-serif; font-size:24px; font-weight:800; color:var(--charcoal); }
+    .client-1 .dog-meta { font-size:11px; color:rgba(31,41,51,0.38); margin-top:2px; margin-bottom:8px; }
+    .client-1 .stars { color:var(--yellow); font-size:15px; letter-spacing:2px; margin-bottom:8px; }
+    .client-1 .quote { font-size:12px; line-height:1.65; color:rgba(31,41,51,0.6); font-style:italic; max-width:340px; }
+    .client-1 .quote strong { font-style:normal; color:var(--charcoal); }
+    .client-1 .foot { margin-top:auto; padding:10px 32px 14px; border-top:1px solid rgba(31,41,51,0.06); width:100%; display:flex; justify-content:space-between; }
+
+    /* CLIENT-2: Full bleed photo with overlay */
+    .client-2 { background:var(--charcoal); }
+    .client-2 .photo-bg { position:absolute; inset:0; background:linear-gradient(135deg,#3a4a5c,#2a3a4c); }
+    .client-2 .photo-bg img.photo-fill { opacity:0.45; }
+    .client-2 .overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(31,41,51,0.98) 0%, rgba(31,41,51,0.5) 55%, rgba(31,41,51,0.1) 100%); }
+    .client-2 .content { position:absolute; bottom:0; left:0; right:0; padding:28px 36px; z-index:2; }
+    .client-2 .stars { color:var(--yellow); font-size:16px; letter-spacing:2px; margin-bottom:8px; }
+    .client-2 .dog-name { font-family:'Poppins',sans-serif; font-size:28px; font-weight:800; color:white; line-height:1.1; margin-bottom:4px; }
+    .client-2 .dog-meta { font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:10px; }
+    .client-2 .quote { font-size:13px; color:rgba(255,255,255,0.7); line-height:1.6; font-style:italic; }
+    .client-2 .quote strong { font-style:normal; color:white; }
+    .client-2 .foot { margin-top:12px; display:flex; justify-content:space-between; }
+
+    /* CLIENT-3: Split — photo left */
+    .client-3 { background:white; flex-direction:row !important; }
+    .client-3 .photo-col { width:200px; flex-shrink:0; position:relative; overflow:hidden; background:linear-gradient(135deg,#a8d5b5,#7ecbdd); display:flex; align-items:center; justify-content:center; }
+    .client-3 .photo-col::after { content:''; position:absolute; inset:0; background:linear-gradient(to right, transparent 60%, rgba(255,255,255,0.15)); }
+    .client-3 .content { flex:1; padding:36px 28px 24px; display:flex; flex-direction:column; }
+    .client-3 .stars { color:var(--yellow); font-size:16px; letter-spacing:2px; margin-bottom:10px; }
+    .client-3 .dog-name { font-family:'Poppins',sans-serif; font-size:22px; font-weight:800; color:var(--charcoal); margin-bottom:3px; }
+    .client-3 .dog-meta { font-size:10.5px; color:rgba(31,41,51,0.38); margin-bottom:12px; }
+    .client-3 .quote { font-size:12.5px; color:rgba(31,41,51,0.65); line-height:1.65; font-style:italic; flex:1; }
+    .client-3 .quote strong { font-style:normal; color:var(--charcoal); }
+    .client-3 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(31,41,51,0.06); display:flex; justify-content:space-between; }
+
+    /* CLIENT-4: Minimal, big name */
+    .client-4 { background:#f0faff; }
+    .client-4 .top-stripe { height:5px; background:linear-gradient(90deg,var(--blue),var(--aqua)); flex-shrink:0; }
+    .client-4 .inner { flex:1; padding:36px 44px; display:flex; flex-direction:column; }
+    .client-4 .photo-small { width:70px; height:70px; border-radius:50%; overflow:hidden; position:relative; background:linear-gradient(135deg,#a8d5b5,#7ecbdd); border:3px solid var(--aqua); margin-bottom:18px; display:flex; align-items:center; justify-content:center; }
+    .client-4 .dog-name { font-family:'Poppins',sans-serif; font-size:38px; font-weight:900; color:var(--charcoal); letter-spacing:-0.025em; line-height:1; margin-bottom:4px; }
+    .client-4 .dog-meta { font-size:11px; color:rgba(31,41,51,0.38); margin-bottom:16px; }
+    .client-4 .quote { font-size:14px; color:rgba(31,41,51,0.65); line-height:1.7; font-style:italic; flex:1; }
+    .client-4 .quote strong { font-style:normal; color:var(--blue); }
+    .client-4 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(31,41,51,0.08); display:flex; justify-content:space-between; }
+
+    /* CLIENT-5: Dark + yellow stars prominent */
+    .client-5 { background:var(--charcoal); }
+    .client-5 .inner { flex:1; padding:40px 44px; display:flex; flex-direction:column; }
+    .client-5 .photo-small { width:80px; height:80px; border-radius:50%; overflow:hidden; position:relative; background:linear-gradient(135deg,#a8d5b5,#7ecbdd); border:3px solid rgba(255,255,255,0.1); margin-bottom:16px; display:flex; align-items:center; justify-content:center; }
+    .client-5 .stars { color:var(--yellow); font-size:22px; letter-spacing:2px; margin-bottom:12px; }
+    .client-5 .dog-name { font-family:'Poppins',sans-serif; font-size:26px; font-weight:800; color:white; margin-bottom:3px; }
+    .client-5 .dog-meta { font-size:11px; color:rgba(255,255,255,0.3); margin-bottom:14px; }
+    .client-5 .quote { font-size:14px; color:rgba(255,255,255,0.6); line-height:1.65; font-style:italic; flex:1; }
+    .client-5 .quote strong { font-style:normal; color:white; }
+    .client-5 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; }
+
+    /* ════════════════════════════════════════════════════════════════
+       SERVICE TEMPLATES
+    ════════════════════════════════════════════════════════════════ */
+
+    /* SERVICE-1: Blue + numbered steps */
+    .service-1 { background:var(--blue); }
+    .service-1 .inner { flex:1; padding:32px 36px; display:flex; flex-direction:column; position:relative; z-index:1; }
+    .service-1 h2 { font-family:'Poppins',sans-serif; font-size:24px; font-weight:800; color:white; line-height:1.2; letter-spacing:-0.015em; margin-bottom:18px; }
+    .service-1 h2 em { color:var(--yellow); font-style:normal; }
+    .service-1 .steps { display:flex; flex-direction:column; gap:11px; flex:1; }
+    .service-1 .step { display:flex; gap:12px; }
+    .service-1 .num { width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.12); border:1.5px solid rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:var(--yellow); flex-shrink:0; }
+    .service-1 .txt { font-size:13px; font-weight:500; color:rgba(255,255,255,0.85); line-height:1.4; padding-top:4px; }
+    .service-1 .txt small { display:block; font-size:11px; font-weight:400; color:rgba(255,255,255,0.4); margin-top:1px; }
+    .service-1 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; }
+
+    /* SERVICE-2: Dark + steps */
+    .service-2 { background:var(--charcoal); }
+    .service-2 .top-bar-full { background:var(--yellow); }
+    .service-2 .inner { flex:1; padding:28px 36px; display:flex; flex-direction:column; position:relative; z-index:1; }
+    .service-2 h2 { font-family:'Poppins',sans-serif; font-size:24px; font-weight:800; color:white; line-height:1.2; margin-bottom:18px; }
+    .service-2 h2 em { color:var(--yellow); font-style:normal; }
+    .service-2 .steps { display:flex; flex-direction:column; gap:12px; flex:1; }
+    .service-2 .step { display:flex; gap:14px; align-items:flex-start; }
+    .service-2 .num { width:32px; height:32px; border-radius:10px; background:rgba(242,201,76,0.12); border:1.5px solid rgba(242,201,76,0.25); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:var(--yellow); flex-shrink:0; }
+    .service-2 .txt { font-size:13px; font-weight:500; color:rgba(255,255,255,0.8); line-height:1.4; padding-top:5px; }
+    .service-2 .txt small { display:block; font-size:11px; font-weight:400; color:rgba(255,255,255,0.35); margin-top:1px; }
+    .service-2 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; }
+
+    /* SERVICE-3: Yellow header */
+    .service-3 { background:white; }
+    .service-3 .header { background:var(--yellow); padding:28px 36px 24px; flex-shrink:0; }
+    .service-3 .header .eyebrow { font-size:9.5px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:rgba(31,41,51,0.5); margin-bottom:6px; }
+    .service-3 .header h2 { font-family:'Poppins',sans-serif; font-size:24px; font-weight:800; color:var(--charcoal); line-height:1.15; }
+    .service-3 .steps { flex:1; padding:20px 36px; display:flex; flex-direction:column; gap:10px; }
+    .service-3 .step { display:flex; gap:14px; align-items:flex-start; padding:10px 0; border-bottom:1px solid rgba(31,41,51,0.06); }
+    .service-3 .step:last-of-type { border-bottom:none; }
+    .service-3 .num { width:30px; height:30px; border-radius:50%; background:var(--charcoal); display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-size:12px; font-weight:700; color:white; flex-shrink:0; }
+    .service-3 .txt { font-size:13px; font-weight:500; color:rgba(31,41,51,0.8); line-height:1.4; padding-top:4px; }
+    .service-3 .txt small { display:block; font-size:11px; font-weight:400; color:rgba(31,41,51,0.4); margin-top:1px; }
+    .service-3 .foot { padding:0 36px 18px; display:flex; justify-content:space-between; }
+
+    /* SERVICE-4: Aqua left column numbers */
+    .service-4 { background:white; flex-direction:row !important; }
+    .service-4 .left-col { width:80px; background:var(--aqua); display:flex; flex-direction:column; align-items:center; padding:32px 0; gap:36px; flex-shrink:0; }
+    .service-4 .left-col .n { font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:var(--blue); opacity:0.5; }
+    .service-4 .right-col { flex:1; padding:30px 28px; display:flex; flex-direction:column; }
+    .service-4 h2 { font-family:'Poppins',sans-serif; font-size:20px; font-weight:800; color:var(--charcoal); line-height:1.2; margin-bottom:20px; }
+    .service-4 h2 em { color:var(--blue); font-style:normal; }
+    .service-4 .steps { display:flex; flex-direction:column; gap:16px; flex:1; }
+    .service-4 .txt { font-size:13px; font-weight:500; color:rgba(31,41,51,0.8); line-height:1.4; }
+    .service-4 .txt small { display:block; font-size:11px; font-weight:400; color:rgba(31,41,51,0.4); margin-top:1px; }
+    .service-4 .foot { margin-top:auto; padding-top:12px; border-top:1px solid rgba(31,41,51,0.06); display:flex; justify-content:space-between; }
+
+    /* SERVICE-5: Minimal white clean */
+    .service-5 { background:white; }
+    .service-5 .top-accent { height:5px; background:linear-gradient(90deg,var(--blue),var(--aqua)); flex-shrink:0; }
+    .service-5 .inner { flex:1; padding:32px 44px; display:flex; flex-direction:column; }
+    .service-5 .eyebrow { font-size:9.5px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:rgba(31,41,51,0.35); margin-bottom:10px; }
+    .service-5 h2 { font-family:'Poppins',sans-serif; font-size:24px; font-weight:800; color:var(--charcoal); line-height:1.2; margin-bottom:22px; }
+    .service-5 h2 em { color:var(--blue); font-style:normal; }
+    .service-5 .steps { display:flex; flex-direction:column; gap:14px; flex:1; }
+    .service-5 .step { display:flex; gap:14px; align-items:flex-start; }
+    .service-5 .num { font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:var(--blue); width:24px; flex-shrink:0; padding-top:2px; }
+    .service-5 .txt { font-size:13px; font-weight:500; color:rgba(31,41,51,0.75); line-height:1.45; }
+    .service-5 .txt small { display:block; font-size:11px; font-weight:400; color:rgba(31,41,51,0.38); margin-top:1px; }
+    .service-5 .foot { margin-top:auto; padding-top:14px; border-top:1px solid rgba(31,41,51,0.06); display:flex; justify-content:space-between; }
+  </style>
+</head>
+<body>
+
+<div id="overlay">
+  <div class="spinner"></div>
+  <p>Exportando PNG 1080×1080...</p>
+</div>
+
+<div class="app">
+
+  <!-- ── Sidebar ── -->
+  <div class="sidebar">
+    <div class="sidebar-top">
+      <div class="brand">WashDog</div>
+      <h1>Template Editor</h1>
+    </div>
+
+    <div class="sidebar-scroll">
+
+      <div>
+        <div class="sec-label">Categoría</div>
+        <div class="cat-tabs">
+          <div class="cat-btn active" onclick="setCategory('tip',event)"><div class="icon">💡</div><div class="name">Dog Tip</div></div>
+          <div class="cat-btn" onclick="setCategory('park',event)"><div class="icon">🌳</div><div class="name">Parque</div></div>
+          <div class="cat-btn" onclick="setCategory('client',event)"><div class="icon">🐶</div><div class="name">Cliente</div></div>
+          <div class="cat-btn" onclick="setCategory('service',event)"><div class="icon">🚿</div><div class="name">Servicio</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sec-label">Estilo</div>
+        <div class="style-grid" id="style-grid"></div>
+      </div>
+
+      <div class="fields" id="fields"></div>
+
+    </div>
+
+    <div class="sidebar-bottom">
+      <button class="export-btn" onclick="exportPost()">⬇ Exportar PNG 1080×1080</button>
+      <p class="hint">Arrastra una foto directamente sobre el área de imagen</p>
+    </div>
+  </div>
+
+  <!-- ── Canvas ── -->
+  <div class="canvas-area">
+    <div class="post-wrap" id="post-wrap"></div>
+  </div>
+
+</div>
+
+<script>
+// ── Config ─────────────────────────────────────────────────────────────────
+let cat = 'tip', style = 1
+let images = {}
+
+const styles = {
+  tip:     [{s:1,name:'Oscuro',desc:'Charcoal + amarillo',color:'#1F2933'},{s:2,name:'Aqua',desc:'Fondo claro azul',color:'#e8f7fd'},{s:3,name:'Barra lateral',desc:'Blanco + barra amarilla',color:'#ffffff'},{s:4,name:'Cita',desc:'Azul + quote grande',color:'#2F80ED'},{s:5,name:'Minimal',desc:'Blanco limpio',color:'#ffffff'}],
+  park:    [{s:1,name:'Foto arriba',desc:'Clásico con foto',color:'#f0faff'},{s:2,name:'Full bleed',desc:'Foto de fondo',color:'#1F2933'},{s:3,name:'Header azul',desc:'Cabecera azul',color:'#2F80ED'},{s:4,name:'Header amarillo',desc:'Cabecera amarilla',color:'#F2C94C'},{s:5,name:'Oscuro círculo',desc:'Dark + foto circular',color:'#1F2933'}],
+  client:  [{s:1,name:'Círculo top',desc:'Gradiente + anillo',color:'#2F80ED'},{s:2,name:'Full photo',desc:'Foto de fondo',color:'#1F2933'},{s:3,name:'Split',desc:'Foto izquierda',color:'#ffffff'},{s:4,name:'Minimal',desc:'Nombre grande',color:'#f0faff'},{s:5,name:'Oscuro stars',desc:'Dark + estrellas',color:'#1F2933'}],
+  service: [{s:1,name:'Azul pasos',desc:'Fondo azul',color:'#2F80ED'},{s:2,name:'Oscuro pasos',desc:'Charcoal + amarillo',color:'#1F2933'},{s:3,name:'Header amarillo',desc:'Cabecera amarilla',color:'#F2C94C'},{s:4,name:'Columna aqua',desc:'Números laterales',color:'#BEE9F7'},{s:5,name:'Minimal',desc:'Blanco limpio',color:'#ffffff'}],
+}
+
+const fields = {
+  tip:     [{id:'badge',label:'Categoría',type:'input',def:'Tip de la semana'},{id:'headline',label:'Titular',type:'input',def:'¿Sabías que el pavimento puede quemar las patas de tu perro?'},{id:'hl',label:'Palabra en color (dentro del titular)',type:'input',def:'quemar las patas'},{id:'body',label:'Cuerpo del tip',type:'textarea',def:'En verano el asfalto en Santiago puede superar los 60°C. Prueba apoyar tu mano 5 segundos — si no aguantas, tu perro tampoco debería caminar ahí.'},{id:'hashtag',label:'Hashtag',type:'input',def:'#PerrosSantiago'}],
+  park:    [{id:'name',label:'Nombre del parque',type:'input',def:'Parque Inés de Suárez'},{id:'loc',label:'Ubicación',type:'input',def:'Providencia / Ñuñoa'},{id:'body',label:'Descripción',type:'textarea',def:'Sombra real, zonas de pasto y espacio para correr sin correa. Ideal para un sábado de mañana con tu perro.'},{id:'chips',label:'Tags (separados por coma)',type:'input',def:'Sin correa,Sombra,Bebederos'}],
+  client:  [{id:'name',label:'Nombre del perro',type:'input',def:'Luna'},{id:'meta',label:'Raza · Edad · Comuna',type:'input',def:'Golden Retriever · 3 años · Ñuñoa'},{id:'quote',label:'Testimonio',type:'textarea',def:'Llegó llena de barro del parque y salió impecable y feliz. El equipo fue increíble con ella.'},{id:'hl',label:'Frase en negrita',type:'input',def:'impecable y feliz'}],
+  service: [{id:'headline',label:'Titular',type:'input',def:'Autolavado en 3 pasos'},{id:'hl',label:'Palabras en color',type:'input',def:'3 pasos'},{id:'step1',label:'Paso 1',type:'input',def:'Elige tu cabina y prepara a tu perro'},{id:'sub1',label:'Paso 1 — detalle',type:'input',def:'Rampa antideslizante y amarre de seguridad incluidos'},{id:'step2',label:'Paso 2',type:'input',def:'Shampoo, acondicionador y secador incluidos'},{id:'sub2',label:'Paso 2 — detalle',type:'input',def:'Productos profesionales sin costo extra'},{id:'step3',label:'Paso 3',type:'input',def:'Listo en 30–45 minutos'},{id:'sub3',label:'Paso 3 — detalle',type:'input',def:'Sin cita previa · Sin esperas'}],
+}
+
+function v(id){ const el=document.querySelector(`[data-field="${id}"]`); return el?el.value:'' }
+function hl(text,word,cls='em'){ return word?text.replace(new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'),`<${cls}>${word}</${cls}>`):text }
+function chipsHtml(str){ return (str||'').split(',').map(c=>`<span class="chip">${c.trim()}</span>`).join('') }
+function photoOrHint(zoneId,dark=false){
+  return images[zoneId]
+    ?`<img class="photo-fill" src="${images[zoneId]}" alt="">`
+    :`<div class="${dark?'drop-hint-dk':''} drop-hint-text">📸 Arrastra foto aquí<br><small style="opacity:.6;font-size:8px;">o clic para seleccionar</small></div>`
+}
+function photoOrHintRound(zoneId){
+  return images[zoneId]
+    ?`<img class="photo-fill-round" src="${images[zoneId]}" alt="">`
+    :`<div class="drop-hint-text" style="font-size:8.5px;">📸<br>Foto aquí</div>`
+}
+
+const BRAND = '<span class="brand-foot brand-lt">WASHDOG</span>'
+const BRAND_DK = '<span class="brand-foot brand-dk">WASHDOG</span>'
+const HASH = (h,dark)=>`<span style="font-size:9.5px;color:${dark?'rgba(47,128,237,0.45)':'rgba(31,41,51,0.3)'};">${h||'#WashDog'}</span>`
+const DOTS = `<div style="display:flex;gap:4px;margin-top:4px;">${[1,2,3,4,5].map(i=>`<div style="width:14px;height:2.5px;border-radius:2px;background:rgba(255,255,255,0.12)"></div>`).join('')}</div>`
+
+// ── Renderers ───────────────────────────────────────────────────────────────
+const render = {
+
+  // TIP
+  'tip-1': ()=>`<div class="post tip-1"><div class="bubbles-abs" style="background:radial-gradient(circle at 85% 15%,rgba(190,233,247,.1) 0,transparent 45%),radial-gradient(circle at 10% 85%,rgba(47,128,237,.07) 0,transparent 40%)"></div><svg class="paw-abs" style="right:28px;top:44px;opacity:.05;width:150px;height:150px" viewBox="0 0 100 100" fill="white"><ellipse cx="50" cy="65" rx="22" ry="18"/><ellipse cx="22" cy="44" rx="9" ry="12"/><ellipse cx="78" cy="44" rx="9" ry="12"/><ellipse cx="35" cy="26" rx="8" ry="10"/><ellipse cx="65" cy="26" rx="8" ry="10"/></svg><div class="top-bar-full grad-rainbow"></div><div class="inner"><div class="badge-yd">${v('badge')||'Tip'}</div><h2>${hl(v('headline'),v('hl'))}</h2><p class="body">${v('body')}</p><div class="foot">${BRAND}<span class="save-pill" style="background:rgba(47,128,237,.15);border:1px solid rgba(47,128,237,.25);color:#BEE9F7;font-size:9px;font-weight:700;padding:5px 12px;border-radius:100px;">Guarda este tip</span></div></div></div>`,
+
+  'tip-2': ()=>`<div class="post tip-2"><div class="top-stripe"></div><div class="inner"><div class="big-num">0${v('badge')||'1'}</div><div class="badge-yd badge-bl">${v('badge')||'Tip'}</div><h2>${hl(v('headline'),v('hl'),'em')}</h2><p class="body">${v('body')}</p><div class="foot">${BRAND_DK}${HASH(v('hashtag'))}</div></div></div>`,
+
+  'tip-3': ()=>`<div class="post tip-3"><div class="side-bar"></div><div class="main"><div class="badge-yd badge-dk">${v('badge')||'Tip'}</div><h2>${hl(v('headline'),v('hl'),'em')}</h2><p class="body">${v('body')}</p><div class="foot">${BRAND_DK}${HASH(v('hashtag'))}</div></div></div>`,
+
+  'tip-4': ()=>`<div class="post tip-4"><div class="bubbles-abs" style="background:radial-gradient(circle at 90% 10%,rgba(255,255,255,.06) 0,transparent 40%),radial-gradient(circle at 5% 90%,rgba(190,233,247,.06) 0,transparent 35%)"></div><div class="inner"><div class="quote-mark">"</div><div class="badge-yd badge-wh">${v('badge')||'Tip'}</div><h2>${hl(v('headline'),v('hl'))}</h2><p class="body">${v('body')}</p><div class="foot">${BRAND}${HASH(v('hashtag'),true)}</div></div></div>`,
+
+  'tip-5': ()=>`<div class="post tip-5"><div class="top-dot"></div><div class="inner"><div class="badge-yd badge-dk">${v('badge')||'Tip'}</div><h2>${hl(v('headline'),v('hl'),'em')}</h2><p class="body">${v('body')}</p><div class="foot">${BRAND_DK}${HASH(v('hashtag'))}</div></div></div>`,
+
+  // PARK
+  'park-1': ()=>`<div class="post park-1"><div class="photo drop-zone" id="zone-park"><div class="loc-badge">📍 Parque dog-friendly</div>${photoOrHint('park')}</div><div class="content"><h2>${v('name')||'Parque'}</h2><div class="meta">📍 ${v('loc')||''}</div><p class="body">${v('body')}</p><div class="chips">${chipsHtml(v('chips'))}</div><div class="foot">${BRAND_DK}<span style="font-size:9.5px;color:var(--blue);font-weight:600;">washdog.cl/newsletter</span></div></div></div>`,
+
+  'park-2': ()=>`<div class="post park-2"><div class="photo-bg drop-zone" id="zone-park">${photoOrHint('park',true)}</div><div class="overlay"></div><div class="content"><h2>${v('name')||'Parque'}</h2><p class="body">${v('body')}</p><div class="chips">${chipsHtml(v('chips'))}</div><div class="foot">${BRAND}${HASH(v('loc'),true)}</div></div></div>`,
+
+  'park-3': ()=>`<div class="post park-3"><div class="header"><h2>${v('name')||'Parque'}</h2><div class="meta">📍 ${v('loc')||''}</div></div><div class="photo drop-zone" id="zone-park">${photoOrHint('park')}</div><div class="content"><p class="body">${v('body')}</p><div class="chips">${chipsHtml(v('chips'))}</div><div class="foot">${BRAND_DK}<span style="font-size:9.5px;color:#16a34a;font-weight:600;">washdog.cl/newsletter</span></div></div></div>`,
+
+  'park-4': ()=>`<div class="post park-4"><div class="header"><div class="eyebrow">Parque de la semana</div><h2>${v('name')||'Parque'}</h2><div class="meta">📍 ${v('loc')||''}</div></div><div class="photo drop-zone" id="zone-park">${photoOrHint('park')}</div><div class="content"><p class="body">${v('body')}</p><div class="chips">${chipsHtml(v('chips'))}</div><div class="foot">${BRAND_DK}${HASH(v('loc'))}</div></div></div>`,
+
+  'park-5': ()=>`<div class="post park-5"><div class="bubbles-abs" style="background:radial-gradient(circle at 80% 80%,rgba(190,233,247,.06) 0,transparent 40%)"></div><div class="top-bar-full grad-rainbow"></div><div class="inner"><div class="badge-yd badge-wh">📍 Parque</div><div class="photo-circle-wrap"><div class="photo-circle drop-zone" id="zone-park">${photoOrHintRound('park')}</div></div><h2>${v('name')||'Parque'}</h2><div class="meta">📍 ${v('loc')||''}</div><p class="body">${v('body')}</p><div class="chips">${chipsHtml(v('chips'))}</div><div class="foot">${BRAND}${HASH(v('loc'),true)}</div></div></div>`,
+
+  // CLIENT
+  'client-1': ()=>`<div class="post client-1"><div class="top"><div class="top-bg"></div><div class="b1"></div><div class="b2"></div><div class="ring-wrap"><div class="ring"><div class="circle drop-zone" id="zone-client">${photoOrHintRound('client')}</div></div></div></div><div class="content"><div class="dog-name">${v('name')||'Nombre'}</div><div class="dog-meta">${v('meta')||''}</div><div class="stars">★★★★★</div><p class="quote">"${hl(v('quote'),v('hl'),'strong')}"</p></div><div class="foot">${BRAND_DK}<span class="brand-foot" style="color:var(--blue);font-size:9.5px;">@washdogexpress</span></div></div>`,
+
+  'client-2': ()=>`<div class="post client-2"><div class="photo-bg drop-zone" id="zone-client">${photoOrHint('client',true)}</div><div class="overlay"></div><div class="content"><div class="stars">★★★★★</div><div class="dog-name">${v('name')||'Nombre'}</div><div class="dog-meta">${v('meta')||''}</div><p class="quote">"${hl(v('quote'),v('hl'),'strong')}"</p><div class="foot">${BRAND}<span class="brand-foot" style="color:var(--aqua);font-size:9.5px;">@washdogexpress</span></div></div></div>`,
+
+  'client-3': ()=>`<div class="post client-3"><div class="photo-col drop-zone" id="zone-client">${photoOrHint('client')}</div><div class="content"><div class="stars">★★★★★</div><div class="dog-name">${v('name')||'Nombre'}</div><div class="dog-meta">${v('meta')||''}</div><p class="quote">"${hl(v('quote'),v('hl'),'strong')}"</p><div class="foot">${BRAND_DK}<span class="brand-foot" style="color:var(--blue);font-size:9.5px;">washdog.cl</span></div></div></div>`,
+
+  'client-4': ()=>`<div class="post client-4"><div class="top-stripe"></div><div class="inner"><div class="photo-small drop-zone" id="zone-client">${photoOrHintRound('client')}</div><div class="dog-name">${v('name')||'Nombre'}</div><div class="dog-meta">${v('meta')||''}</div><p class="quote">"${hl(v('quote'),v('hl'),'strong')}"</p><div class="foot">${BRAND_DK}<span style="font-size:9px;color:rgba(31,41,51,.35);">★★★★★</span></div></div></div>`,
+
+  'client-5': ()=>`<div class="post client-5"><div class="bubbles-abs" style="background:radial-gradient(circle at 90% 10%,rgba(47,128,237,.07) 0,transparent 40%)"></div><div class="inner"><div class="photo-small drop-zone" id="zone-client">${photoOrHintRound('client')}</div><div class="stars">★★★★★</div><div class="dog-name">${v('name')||'Nombre'}</div><div class="dog-meta">${v('meta')||''}</div><p class="quote">"${hl(v('quote'),v('hl'),'strong')}"</p><div class="foot">${BRAND}<span class="brand-foot" style="color:rgba(255,255,255,.25);">@washdogexpress</span></div></div></div>`,
+
+  // SERVICE
+  'service-1': ()=>`<div class="post service-1"><svg class="bubbles-abs" viewBox="0 0 540 540"><circle cx="480" cy="80" r="100" fill="none" stroke="white" stroke-opacity=".04" stroke-width="2"/><circle cx="60" cy="460" r="140" fill="none" stroke="white" stroke-opacity=".03" stroke-width="2"/></svg><div class="top-bar-full grad-yellow"></div><div class="inner"><div class="badge-yd badge-wh">Cómo funciona</div><h2 style="margin-top:12px">${hl(v('headline'),v('hl'))}</h2><div class="steps"><div class="step"><div class="num">1</div><div class="txt">${v('step1')}<small>${v('sub1')}</small></div></div><div class="step"><div class="num">2</div><div class="txt">${v('step2')}<small>${v('sub2')}</small></div></div><div class="step"><div class="num">3</div><div class="txt">${v('step3')}<small>${v('sub3')}</small></div></div></div><div class="foot">${BRAND}<span style="font-size:9.5px;color:rgba(190,233,247,.7);font-weight:600;">washdog.cl</span></div></div></div>`,
+
+  'service-2': ()=>`<div class="post service-2"><div class="top-bar-full" style="background:var(--yellow)"></div><div class="inner"><div class="badge-yd">Cómo funciona</div><h2 style="margin-top:12px">${hl(v('headline'),v('hl'))}</h2><div class="steps"><div class="step"><div class="num">1</div><div class="txt">${v('step1')}<small>${v('sub1')}</small></div></div><div class="step"><div class="num">2</div><div class="txt">${v('step2')}<small>${v('sub2')}</small></div></div><div class="step"><div class="num">3</div><div class="txt">${v('step3')}<small>${v('sub3')}</small></div></div></div><div class="foot">${BRAND}<span style="font-size:9.5px;color:rgba(255,255,255,.3);font-weight:600;">washdog.cl</span></div></div></div>`,
+
+  'service-3': ()=>`<div class="post service-3"><div class="header"><div class="eyebrow">Cómo funciona</div><h2>${hl(v('headline'),v('hl'),'b')}</h2></div><div class="steps"><div class="step"><div class="num">1</div><div class="txt">${v('step1')}<small>${v('sub1')}</small></div></div><div class="step"><div class="num">2</div><div class="txt">${v('step2')}<small>${v('sub2')}</small></div></div><div class="step"><div class="num">3</div><div class="txt">${v('step3')}<small>${v('sub3')}</small></div></div></div><div class="foot">${BRAND_DK}<span style="font-size:9.5px;color:var(--blue);font-weight:600;">washdog.cl</span></div></div>`,
+
+  'service-4': ()=>`<div class="post service-4"><div class="left-col"><span class="n">1</span><span class="n">2</span><span class="n">3</span></div><div class="right-col"><div class="badge-yd badge-bl">Cómo funciona</div><h2 style="margin-top:12px">${hl(v('headline'),v('hl'),'em')}</h2><div class="steps"><div class="txt">${v('step1')}<small>${v('sub1')}</small></div><div class="txt">${v('step2')}<small>${v('sub2')}</small></div><div class="txt">${v('step3')}<small>${v('sub3')}</small></div></div><div class="foot">${BRAND_DK}<span style="font-size:9.5px;color:var(--blue);font-weight:600;">washdog.cl</span></div></div></div>`,
+
+  'service-5': ()=>`<div class="post service-5"><div class="top-accent"></div><div class="inner"><div class="eyebrow">Cómo funciona</div><h2>${hl(v('headline'),v('hl'),'em')}</h2><div class="steps"><div class="step"><div class="num">01</div><div class="txt">${v('step1')}<small>${v('sub1')}</small></div></div><div class="step"><div class="num">02</div><div class="txt">${v('step2')}<small>${v('sub2')}</small></div></div><div class="step"><div class="num">03</div><div class="txt">${v('step3')}<small>${v('sub3')}</small></div></div></div><div class="foot">${BRAND_DK}<span style="font-size:9.5px;color:var(--blue);font-weight:600;">washdog.cl</span></div></div></div>`,
+}
+
+// ── UI Builders ──────────────────────────────────────────────────────────────
+function buildStyleGrid(){
+  const grid = document.getElementById('style-grid')
+  grid.innerHTML = styles[cat].map(({s,name,desc,color})=>`
+    <div class="style-btn ${style===s?'active':''}" onclick="setStyle(${s})">
+      <div class="style-swatch" style="background:${color};border:1.5px solid rgba(255,255,255,0.1)"></div>
+      <div class="style-info"><div class="style-name">${name}</div><div class="style-desc">${desc}</div></div>
+    </div>`).join('')
+}
+
+function buildFields(){
+  const el = document.getElementById('fields')
+  el.innerHTML = fields[cat].map(f=>`
+    <div class="field">
+      <label>${f.label}</label>
+      ${f.type==='textarea'
+        ?`<textarea data-field="${f.id}" oninput="renderPost()">${f.def||''}</textarea>`
+        :`<input type="text" data-field="${f.id}" value="${f.def||''}" oninput="renderPost()">`}
+    </div>`).join('')
+}
+
+function setCategory(c, e){
+  cat=c; style=1; images={}
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'))
+  e.currentTarget.classList.add('active')
+  buildStyleGrid(); buildFields(); renderPost()
+}
+
+function setStyle(s){
+  style=s
+  document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'))
+  document.querySelectorAll('.style-btn')[s-1].classList.add('active')
+  renderPost()
+}
+
+function renderPost(){
+  const key=`${cat}-${style}`
+  const fn=render[key]
+  if(!fn) return
+  document.getElementById('post-wrap').innerHTML=fn()
+  attachZones()
+}
+
+// ── Drop Zones ───────────────────────────────────────────────────────────────
+function attachZones(){
+  document.querySelectorAll('.drop-zone').forEach(z=>{
+    const zid=z.id.replace('zone-','')
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')})
+    z.addEventListener('dragleave',()=>z.classList.remove('over'))
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))loadImg(f,zid)})
+    z.addEventListener('click',()=>{const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=e=>{if(e.target.files[0])loadImg(e.target.files[0],zid)};i.click()})
+  })
+}
+
+function loadImg(file,zid){
+  const r=new FileReader()
+  r.onload=e=>{images[zid]=e.target.result;renderPost()}
+  r.readAsDataURL(file)
+}
+
+// ── Export ────────────────────────────────────────────────────────────────────
+async function exportPost(){
+  document.getElementById('overlay').classList.add('show')
+  await new Promise(r=>setTimeout(r,120))
+  const el=document.querySelector('.post')
+  const canvas=await html2canvas(el,{scale:2,useCORS:true,allowTaint:true,backgroundColor:null,logging:false})
+  const a=document.createElement('a')
+  a.download=`washdog-${cat}-${style}-${Date.now()}.png`
+  a.href=canvas.toDataURL('image/png')
+  a.click()
+  document.getElementById('overlay').classList.remove('show')
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+buildStyleGrid(); buildFields(); renderPost()
+</script>
+</body>
+</html>

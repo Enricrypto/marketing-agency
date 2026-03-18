@@ -1,0 +1,39 @@
+/*
+ * WashDog — Typography System
+ * Fonts: Poppins (headings) + Inter (body)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #1F2933;
+  background: #F0FAFF;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+}
+
+/* ── Scale — full 1080px artboard ────────────────────────────────────────── */
+.type-hero     { font-family: 'Poppins', sans-serif; font-size: 80px; font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; }
+.type-headline { font-family: 'Poppins', sans-serif; font-size: 60px; font-weight: 800; line-height: 1.1;  letter-spacing: -0.025em; }
+.type-title    { font-family: 'Poppins', sans-serif; font-size: 44px; font-weight: 700; line-height: 1.2;  letter-spacing: -0.015em; }
+.type-body     { font-family: 'Inter',   sans-serif; font-size: 28px; font-weight: 400; line-height: 1.65; }
+.type-body-med { font-family: 'Inter',   sans-serif; font-size: 28px; font-weight: 500; line-height: 1.5; }
+.type-small    { font-family: 'Inter',   sans-serif; font-size: 22px; font-weight: 400; line-height: 1.6; }
+.type-label    { font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.type-micro    { font-family: 'Inter',   sans-serif; font-size: 16px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* ── Color utilities ─────────────────────────────────────────────────────── */
+.text-white     { color: #FFFFFF; }
+.text-charcoal  { color: #1F2933; }
+.text-blue      { color: #2F80ED; }
+.text-yellow    { color: #F2C94C; }
+.text-aqua      { color: #BEE9F7; }
+.text-muted     { color: rgba(255,255,255,0.55); }
+.text-muted-dk  { color: rgba(31,41,51,0.5); }

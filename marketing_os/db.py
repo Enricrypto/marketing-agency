@@ -8,6 +8,7 @@ Tablas:
     content_outputs   — Contenido generado y guardado
     evaluations       — Scores de calidad automáticos
     performance_metrics — Métricas importadas desde analytics (futuro)
+    pages               — Registro de páginas locales SEO (Phase 2)
 """
 
 import sqlite3
@@ -118,13 +119,52 @@ CREATE TABLE IF NOT EXISTS performance_metrics (
     recorded_at        DATETIME NOT NULL
 );
 
+-- Páginas locales SEO (Phase 2 — Programmatic Local SEO Expansion)
+CREATE TABLE IF NOT EXISTS pages (
+    page_id       TEXT PRIMARY KEY,
+    service_slug  TEXT NOT NULL,
+    service_name  TEXT NOT NULL,
+    commune_slug  TEXT NOT NULL,
+    commune_name  TEXT NOT NULL,
+    keyword       TEXT NOT NULL,
+    status        TEXT DEFAULT 'pending',  -- pending | generated | published | failed
+    workflow_id   TEXT,
+    created_at    TEXT NOT NULL
+);
+
+-- Registro de workflows ya enviados a Google Sheets (evita duplicados)
+CREATE TABLE IF NOT EXISTS sheet_syncs (
+    workflow_id  TEXT NOT NULL,
+    sheet_name   TEXT NOT NULL,
+    synced_at    DATETIME NOT NULL,
+    PRIMARY KEY (workflow_id, sheet_name)
+);
+
+-- Newsletter issues (cada envío semanal)
+CREATE TABLE IF NOT EXISTS newsletter_issues (
+    id              TEXT PRIMARY KEY,
+    issue_number    INTEGER NOT NULL UNIQUE,
+    focus_commune   TEXT NOT NULL,
+    subject_line    TEXT,
+    preview_text    TEXT,
+    status          TEXT DEFAULT 'draft',  -- draft | sent | failed
+    recipient_count INTEGER DEFAULT 0,
+    workflow_id     TEXT,
+    sent_at         DATETIME,
+    created_at      DATETIME NOT NULL
+);
+
 -- Índices para queries de analytics
-CREATE INDEX IF NOT EXISTS idx_steps_workflow     ON steps(workflow_id);
-CREATE INDEX IF NOT EXISTS idx_outputs_workflow   ON content_outputs(workflow_id);
-CREATE INDEX IF NOT EXISTS idx_evals_workflow     ON evaluations(workflow_id);
-CREATE INDEX IF NOT EXISTS idx_metrics_workflow   ON performance_metrics(workflow_id);
-CREATE INDEX IF NOT EXISTS idx_workflows_status   ON workflows(status, started_at);
-CREATE INDEX IF NOT EXISTS idx_outputs_type       ON content_outputs(content_type, created_at);
+CREATE INDEX IF NOT EXISTS idx_steps_workflow       ON steps(workflow_id);
+CREATE INDEX IF NOT EXISTS idx_outputs_workflow     ON content_outputs(workflow_id);
+CREATE INDEX IF NOT EXISTS idx_evals_workflow       ON evaluations(workflow_id);
+CREATE INDEX IF NOT EXISTS idx_metrics_workflow     ON performance_metrics(workflow_id);
+CREATE INDEX IF NOT EXISTS idx_workflows_status     ON workflows(status, started_at);
+CREATE INDEX IF NOT EXISTS idx_outputs_type         ON content_outputs(content_type, created_at);
+CREATE INDEX IF NOT EXISTS idx_sheet_syncs          ON sheet_syncs(sheet_name, synced_at);
+CREATE INDEX IF NOT EXISTS idx_pages_status         ON pages(status, created_at);
+CREATE INDEX IF NOT EXISTS idx_pages_service        ON pages(service_slug, commune_slug);
+CREATE INDEX IF NOT EXISTS idx_newsletter_issues    ON newsletter_issues(status, created_at);
 """
 
 
@@ -171,6 +211,28 @@ def fetch_all(query: str, params: tuple = ()) -> list[dict]:
     with db() as conn:
         rows = conn.execute(query, params).fetchall()
     return [dict(r) for r in rows]
+
+
+# ── Sheet sync tracking ───────────────────────────────────────────────────────
+
+def mark_synced(workflow_ids: list[str], sheet_name: str) -> None:
+    """Records workflow IDs as synced to a given sheet. Safe to call multiple times."""
+    from datetime import datetime
+    now = datetime.utcnow().isoformat()
+    with db() as conn:
+        conn.executemany(
+            "INSERT OR IGNORE INTO sheet_syncs (workflow_id, sheet_name, synced_at) VALUES (?, ?, ?)",
+            [(wid, sheet_name, now) for wid in workflow_ids],
+        )
+
+
+def already_synced_ids(sheet_name: str) -> set[str]:
+    """Returns the set of workflow IDs already synced to a given sheet."""
+    rows = fetch_all(
+        "SELECT workflow_id FROM sheet_syncs WHERE sheet_name = ?",
+        (sheet_name,),
+    )
+    return {r["workflow_id"] for r in rows}
 
 
 # ── CLI básico ────────────────────────────────────────────────────────────────

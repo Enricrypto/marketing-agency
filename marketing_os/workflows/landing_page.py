@@ -10,6 +10,8 @@ Steps:
     3. conversion_scoring  — Evaluación automática de calidad
 """
 
+import re
+import unicodedata
 from pathlib import Path
 import sys
 
@@ -17,6 +19,30 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from workflows.base import WorkflowRunner
 from evaluations.scorer import score_content
+
+
+def generate_service_slug(service_slug: str, commune_slug: str) -> str:
+    """
+    Generates the canonical URL slug for a local landing page.
+
+    Args:
+        service_slug:  e.g. "peluqueria-canina"
+        commune_slug:  e.g. "providencia"
+
+    Returns:
+        e.g. "peluqueria-canina-providencia"
+    """
+    return f"{service_slug}-{commune_slug}"
+
+
+def _slugify(text: str) -> str:
+    """Converts a display name to a URL slug (strips accents, lowercases, hyphens)."""
+    normalized = unicodedata.normalize("NFD", text)
+    ascii_only = normalized.encode("ascii", "ignore").decode("ascii")
+    slug = ascii_only.lower().strip()
+    slug = re.sub(r"\s+", "-", slug)
+    slug = re.sub(r"[^a-z0-9\-]", "", slug)
+    return re.sub(r"-{2,}", "-", slug).strip("-")
 
 
 _BUSINESS_CONTEXT = """
@@ -27,6 +53,10 @@ Servicios disponibles:
   - Tratamiento antipulgas y garrapatas
   - Deslanado (doble capa)
   - Corte y lima de uñas
+  - Peluquería canina Ñuñoa
+  - Auto lavado perros Ñuñoa
+  - Peluquería gatos Ñuñoa
+  - Precio peluquería Ñuñoa
 Diferenciadores: atención personalizada, productos premium hipoalergénicos, agenda online.
 CTA principal: "Reserva tu hora" (WhatsApp o formulario web).
 Precio promedio: $25.000–$45.000 CLP según tamaño del perro.

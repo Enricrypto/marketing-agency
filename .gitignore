@@ -1,0 +1,31 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Logs
+marketing_os/logs/
+
+# OAuth tokens (auto-refreshed, never commit)
+marketing_os/workspace/.token.json
+
+# Database (local state)
+marketing_os/state/marketing_os.db
+
+# Bad pip install artifact
+marketing_os/=*
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+*.swp

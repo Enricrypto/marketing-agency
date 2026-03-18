@@ -23,17 +23,39 @@ from evaluations.scorer import score_content
 
 _BUSINESS_CONTEXT = """
 WashDog es una peluquería canina premium en Santiago, Chile.
-Servicios: baño completo, corte de pelo, tratamiento antipulgas, deslanado, corte de uñas.
+Servicios: baño completo, corte de pelo, tratamiento antipulgas, deslanado, corte de uñas,
+  peluquería canina Ñuñoa, auto lavado perros Ñuñoa, peluquería gatos Ñuñoa, precio peluquería Ñuñoa.
 Diferenciadores: atención personalizada, productos premium, agenda online fácil.
 Tono de marca: experto, cercano, apasionado por las mascotas.
-Audiencia: dueños de perros, clase media-alta, comunas como Providencia, Las Condes, Ñuñoa, La Reina.
+Audiencia: dueños de perros y gatos, clase media-alta, comunas como Providencia, Las Condes, Ñuñoa, La Reina.
 """
+
+
+_CTA_VARIANTS = [
+    (
+        "## ¿Buscas peluquería canina en Santiago?",
+        "En **WashDog** cuidamos a tu perro como si fuera el nuestro:",
+    ),
+    (
+        "## Dale lo mejor a tu perro",
+        "En **WashDog** (Ñuñoa, Santiago) tienes todo en un solo lugar:",
+    ),
+    (
+        "## ¿Tu perro necesita un buen grooming?",
+        "Agenda en **WashDog** — atención individual, sin jaulas, sin apuro:",
+    ),
+    (
+        "## Servicios profesionales para tu perro en Santiago",
+        "**WashDog** ofrece grooming premium con productos hipoalergénicos:",
+    ),
+]
 
 
 def run_blog_seo(
     topic: str,
     target_keyword: str,
     city: str = "Santiago",
+    breed: str | None = None,
     model: str = "claude-sonnet-4-6",
 ) -> dict:
     """
@@ -50,6 +72,13 @@ def run_blog_seo(
             workflow_id, title, meta_description, content,
             keywords (lista expandida), scores (dict de evaluación)
     """
+    import hashlib
+    # Deterministic CTA variant per topic (not random — avoids non-determinism in tests)
+    cta_idx   = int(hashlib.md5(topic.encode()).hexdigest(), 16) % len(_CTA_VARIANTS)
+    cta_h2, cta_intro = _CTA_VARIANTS[cta_idx]
+
+    breed_context = f"\nRaza destacada en este artículo: {breed}" if breed else ""
+
     wf = WorkflowRunner("blog_post", topic, target_keyword, city)
 
     try:
@@ -60,7 +89,7 @@ def run_blog_seo(
             model      = model,
             prompt     = f"""Eres un experto SEO especializado en el mercado chileno.
 
-{_BUSINESS_CONTEXT}
+{_BUSINESS_CONTEXT}{breed_context}
 
 Tu tarea es expandir la keyword principal en variaciones long-tail para Chile.
 
@@ -124,13 +153,19 @@ Retorna SOLO un JSON con esta estructura exacta:
         headings = outline.get("headings",         [])
 
         # ── Step 3: Article writing ───────────────────────────────────────────
+        breed_note = (
+            f"\nRaza: {breed} — el artículo debe incluir detalles específicos de esta raza "
+            f"(tipo de pelo, frecuencia de baño recomendada, técnicas de corte, etc.)."
+            if breed else ""
+        )
+
         article = wf.run_step(
             step_name  = "article_writing",
             agent_name = "copywriting",
             model      = model,
             prompt     = f"""Escribe un artículo SEO completo para el blog de WashDog.
 
-{_BUSINESS_CONTEXT}
+{_BUSINESS_CONTEXT}{breed_note}
 
 Título:            {title}
 Keyword principal: {target_keyword}
@@ -138,16 +173,45 @@ Ciudad:            {city}
 Estructura:
 {chr(10).join(f"  {h}" for h in headings)}
 
-Requisitos obligatorios:
-✓ 900–1.200 palabras
-✓ Español chileno natural (evitar "vosotros", usar "ustedes")
-✓ Keyword principal en: primer párrafo, título H1, meta y 2–3 veces en el cuerpo
-✓ Mencionar {city} y barrios como Providencia, Las Condes, Ñuñoa o La Reina cuando sea natural
-✓ Al menos 1 CTA al final invitando a reservar con WashDog
-✓ Incluir 2–3 sugerencias de links internos (formato: [texto del link](URL relativa))
-✓ Tono: experto pero cercano, como un groomer apasionado hablando con el dueño del perro
+REQUISITOS OBLIGATORIOS (todos deben cumplirse):
 
-Formato de entrega: Markdown completo listo para publicar.""",
+✓ 900–1.200 palabras
+✓ Español chileno natural (usar "ustedes", nunca "vosotros")
+✓ Keyword "{target_keyword}" en: H1, primer párrafo, y 2–3 veces más en el cuerpo
+✓ Al menos un párrafo de señal local, por ejemplo:
+  "Si estás en Ñuñoa o Santiago y prefieres dejarlo en manos de profesionales, en WashDog estamos para ayudarte."
+✓ 2–3 links internos naturales usando SOLO estas URLs reales del sitio:
+  [baño para perros](/servicios/bano-perros)
+  [corte de pelo canino](/servicios/corte-perros)
+  [peluquería canina Ñuñoa](/servicios/peluqueria-canina-nunoa)
+  [peluquería canina en Santiago](/servicios/peluqueria-canina)
+  [auto lavado perros](/servicios/auto-lavado-perros)
+  [peluquería para gatos](/servicios/peluqueria-gatos)
+  [precio peluquería canina](/servicios/precio-peluqueria)
+  [spa canino](/servicios/spa-canino)
+  [peluquería canina Providencia](/servicios/peluqueria-canina-providencia)
+  [peluquería canina Las Condes](/servicios/peluqueria-canina-las-condes)
+
+✓ El artículo DEBE terminar con esta sección al final (cópialas exactamente):
+
+---
+
+{cta_h2}
+
+{cta_intro}
+
+- 🛁 [Baño para perros](/servicios/bano-perros) — shampoo hipoalergénico, secado profesional
+- ✂️ [Corte de pelo canino](/servicios/corte-perros) — todas las razas
+- 🐾 [Peluquería canina Ñuñoa](/servicios/peluqueria-canina-nunoa) — atención one-to-one
+- 🐱 [Peluquería para gatos](/servicios/peluqueria-gatos)
+
+📍 Av. Irarrázaval 2086 B, Ñuñoa · Lunes a domingo 10:00–20:00
+
+[**Ver disponibilidad →**](https://share.google/8t1bo1xyYIfTKyDAw)
+
+✓ Tono: experto pero cercano, como un groomer apasionado hablando directamente al dueño del perro
+
+Formato de entrega: Markdown listo para publicar. No incluyas bloque de código ni marcadores al inicio o final.""",
         )
 
         # ── Guardar contenido ─────────────────────────────────────────────────

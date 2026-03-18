@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>WashDog Post — Client Feature</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#2F80ED; --yellow:#F2C94C; --aqua:#BEE9F7; --charcoal:#1F2933; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:#e2e8f0; display:flex; flex-direction:column; align-items:center; gap:32px; padding:60px 40px; }
+    .label { font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#64748b; align-self:flex-start; }
+
+    /* Square canvas */
+    .canvas {
+      width:540px; height:540px;
+      background:#f8fafc;
+      position:relative; overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+
+    /* Top gradient bar */
+    .top-gradient { height:240px; position:relative; }
+    .top-gradient-bg {
+      position:absolute; inset:0;
+      background:linear-gradient(135deg, #2F80ED 0%, #1a5ec8 50%, #BEE9F7 100%);
+    }
+
+    /* Dog photo circle */
+    .photo-circle-wrap {
+      position:absolute; bottom:-50px; left:50%;
+      transform:translateX(-50%);
+      z-index:2;
+    }
+    .photo-circle-ring {
+      width:136px; height:136px; border-radius:50%;
+      padding:4px;
+      background:linear-gradient(135deg, var(--yellow), #f29c4c);
+    }
+    .photo-circle {
+      width:100%; height:100%; border-radius:50%;
+      background:linear-gradient(135deg, #a8d5b5, #7ecbdd);
+      display:flex; align-items:center; justify-content:center;
+      border:4px solid white;
+    }
+    .photo-circle span {
+      font-size:11px; font-weight:600; color:rgba(255,255,255,0.7);
+      letter-spacing:0.06em; text-transform:uppercase; text-align:center;
+      line-height:1.4;
+    }
+
+    /* Bubbles in photo area */
+    .bubble-deco {
+      position:absolute;
+    }
+
+    /* Content section */
+    .content {
+      flex:1; padding:64px 36px 28px;
+      display:flex; flex-direction:column; align-items:center;
+      text-align:center; position:relative; z-index:1;
+    }
+
+    .dog-name {
+      font-family:'Poppins',sans-serif; font-size:28px; font-weight:800;
+      color:var(--charcoal); letter-spacing:-0.01em; margin-bottom:4px;
+    }
+    .dog-meta { font-size:13px; color:rgba(31,41,51,0.45); font-weight:500; margin-bottom:16px; }
+
+    /* Stars */
+    .stars { color:var(--yellow); font-size:18px; letter-spacing:2px; margin-bottom:14px; }
+
+    .quote {
+      font-size:14px; line-height:1.65; color:rgba(31,41,51,0.65);
+      max-width:360px; font-style:italic;
+    }
+    .quote strong { font-style:normal; color:var(--charcoal); }
+
+    /* Tags */
+    .tags { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:14px; }
+    .tag {
+      background:rgba(47,128,237,0.08); color:var(--blue);
+      font-size:10.5px; font-weight:600; padding:5px 12px; border-radius:100px;
+    }
+    .tag.yellow-tag { background:rgba(242,201,76,0.15); color:#92610a; }
+
+    /* Footer */
+    .footer {
+      margin-top:auto; padding:16px 36px 20px;
+      border-top:1px solid rgba(31,41,51,0.06);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand { font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:rgba(31,41,51,0.2); letter-spacing:0.1em; }
+    .ig-handle { font-size:11px; color:var(--blue); font-weight:600; }
+  </style>
+</head>
+<body>
+
+<div class="label">Template 4 — Client Feature (1080×1080)</div>
+
+<div class="canvas">
+
+  <!-- Top gradient -->
+  <div class="top-gradient">
+    <div class="top-gradient-bg"></div>
+    <!-- Bubble decorations -->
+    <svg class="bubble-deco" style="top:20px;left:20px;opacity:0.12" width="60" height="60" viewBox="0 0 60 60">
+      <circle cx="30" cy="30" r="25" fill="none" stroke="white" stroke-width="2"/>
+    </svg>
+    <svg class="bubble-deco" style="top:40px;right:30px;opacity:0.1" width="80" height="80" viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="35" fill="none" stroke="white" stroke-width="2"/>
+      <circle cx="40" cy="40" r="20" fill="none" stroke="white" stroke-width="1.5"/>
+    </svg>
+    <svg class="bubble-deco" style="bottom:20px;left:40px;opacity:0.08" width="50" height="50" viewBox="0 0 50 50">
+      <circle cx="25" cy="25" r="20" fill="white"/>
+    </svg>
+
+    <!-- Dog photo circle -->
+    <div class="photo-circle-wrap">
+      <div class="photo-circle-ring">
+        <div class="photo-circle">
+          <span>Foto del<br>perro aquí</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="dog-name">Luna</div>
+    <div class="dog-meta">Golden Retriever · 3 años · Ñuñoa</div>
+    <div class="stars">★★★★★</div>
+    <p class="quote">
+      "Luna llegó llena de barro del parque y salió <strong>impecable y feliz.</strong> El equipo fue increíble con ella, siempre tranquila durante todo el proceso."
+    </p>
+    <div class="tags">
+      <span class="tag">Baño completo</span>
+      <span class="tag">Secado profesional</span>
+      <span class="tag yellow-tag">Cliente feliz</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="brand">WASHDOG</span>
+    <span class="ig-handle">@washdogexpress</span>
+  </div>
+
+</div>
+
+</body>
+</html>

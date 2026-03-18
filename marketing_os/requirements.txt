@@ -1,5 +1,7 @@
 # Marketing OS — Dependencias Python
 # Instalar con: pip install -r requirements.txt
+# NOTA: instalar google-analytics-data DESPUÉS de los demás paquetes google-*
+#   pip install -r requirements.txt && pip install google-analytics-data --force-reinstall
 
 # Claude / Anthropic
 anthropic>=0.40.0
@@ -11,5 +13,10 @@ google-auth-oauthlib>=1.0.0
 google-auth-httplib2>=0.2.0
 gspread>=6.0.0
 
+# Google Analytics Data API (GA4)
+google-analytics-data>=0.18.0
+
 # Utilidades
 python-dotenv>=1.0.0
+jinja2>=3.1.0
+resend>=2.0.0

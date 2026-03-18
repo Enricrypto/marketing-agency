@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>WashDog — 5-Slide Carousel Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:#2F80ED; --yellow:#F2C94C; --aqua:#BEE9F7;
+      --charcoal:#1F2933; --white:#FFFFFF;
+      --muted:rgba(255,255,255,0.5);
+      --muted-dk:rgba(31,41,51,0.5);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Inter',sans-serif;
+      background:#0f172a;
+      padding:60px 40px;
+      display:flex; flex-direction:column; align-items:center; gap:0;
+    }
+    h1 { font-family:'Poppins',sans-serif; color:white; font-size:20px; font-weight:700; margin-bottom:6px; align-self:flex-start; }
+    .intro { font-size:13px; color:rgba(255,255,255,0.4); margin-bottom:40px; align-self:flex-start; }
+
+    /* ── Slide row ── */
+    .carousel-row {
+      display:flex; gap:16px; align-items:flex-start;
+    }
+
+    /* Each slide at 50% scale */
+    .slide {
+      width:320px; height:320px;
+      position:relative; overflow:hidden;
+      flex-shrink:0; display:flex; flex-direction:column;
+    }
+
+    /* slide number label */
+    .slide-label {
+      font-size:10px; font-weight:700; letter-spacing:0.12em;
+      text-transform:uppercase; color:rgba(255,255,255,0.3);
+      margin-bottom:8px; text-align:center;
+    }
+
+    .slide-inner {
+      flex:1; display:flex; flex-direction:column;
+      position:relative;
+    }
+
+    /* ── Slide 1: Hook ── */
+    .s1 { background:var(--charcoal); }
+    .s1 .top-bar { height:4px; background:linear-gradient(90deg,var(--blue),var(--aqua),var(--yellow)); flex-shrink:0; }
+    .s1 .inner { flex:1; padding:26px 28px; display:flex; flex-direction:column; }
+    .s1 .badge {
+      display:inline-flex; align-items:center; gap:5px;
+      background:rgba(242,201,76,0.12); border:1px solid rgba(242,201,76,0.25);
+      color:var(--yellow); font-size:9px; font-weight:700; letter-spacing:0.14em;
+      text-transform:uppercase; padding:4px 10px; border-radius:100px;
+      margin-bottom:14px; align-self:flex-start;
+    }
+    .s1 h2 {
+      font-family:'Poppins',sans-serif; font-size:18px; font-weight:800;
+      color:white; line-height:1.2; letter-spacing:-0.015em; flex:1;
+    }
+    .s1 h2 em { color:var(--yellow); font-style:normal; }
+    .s1 .swipe { font-size:9px; color:rgba(255,255,255,0.3); font-weight:600; margin-top:auto; }
+    .s1 .big-num {
+      position:absolute; right:20px; top:24px;
+      font-family:'Poppins',sans-serif; font-size:80px; font-weight:900;
+      color:rgba(255,255,255,0.03); line-height:1;
+    }
+    /* bubble deco */
+    .s1::after {
+      content:''; position:absolute;
+      width:160px; height:160px; border-radius:50%;
+      background:rgba(47,128,237,0.06);
+      bottom:-40px; right:-40px;
+    }
+
+    /* ── Slides 2-4: Content ── */
+    .s-content { background:#f0faff; }
+    .s-content .top-bar { height:4px; background:var(--blue); flex-shrink:0; }
+    .s-content .inner { flex:1; padding:22px 24px; display:flex; flex-direction:column; }
+    .s-content .step-num {
+      font-family:'Poppins',sans-serif; font-size:11px; font-weight:700;
+      color:var(--blue); letter-spacing:0.1em; text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    .s-content h3 {
+      font-family:'Poppins',sans-serif; font-size:15px; font-weight:700;
+      color:var(--charcoal); line-height:1.25; letter-spacing:-0.01em;
+      margin-bottom:10px;
+    }
+    .s-content .body {
+      font-size:12px; line-height:1.6; color:rgba(31,41,51,0.6); flex:1;
+    }
+    .s-content .img-ph {
+      width:100%; height:70px; border-radius:8px;
+      background:rgba(47,128,237,0.08);
+      border:1.5px dashed rgba(47,128,237,0.2);
+      display:flex; align-items:center; justify-content:center;
+      font-size:9px; font-weight:600; color:rgba(47,128,237,0.4);
+      letter-spacing:0.08em; text-transform:uppercase; margin-top:10px;
+    }
+    .s-content .footer {
+      margin-top:auto; padding-top:10px;
+      border-top:1px solid rgba(31,41,51,0.06);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .s-content .brand { font-family:'Poppins',sans-serif; font-size:9px; font-weight:700; color:rgba(31,41,51,0.2); letter-spacing:0.1em; }
+    .s-content .progress { display:flex; gap:3px; }
+    .s-content .dot { width:12px; height:2px; border-radius:1px; background:rgba(31,41,51,0.1); }
+    .s-content .dot.on { background:var(--blue); }
+
+    /* ── Slide 5: CTA ── */
+    .s5 { background:var(--yellow); }
+    .s5 .inner { flex:1; padding:28px 28px; display:flex; flex-direction:column; }
+    .s5 .eyebrow { font-size:9px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:rgba(31,41,51,0.4); margin-bottom:14px; }
+    .s5 h2 {
+      font-family:'Poppins',sans-serif; font-size:20px; font-weight:900;
+      color:var(--charcoal); line-height:1.15; letter-spacing:-0.02em; flex:1;
+    }
+    .s5 .cta-box {
+      background:var(--charcoal); color:white;
+      font-size:11px; font-weight:700; padding:10px 16px;
+      border-radius:8px; line-height:1.4; margin-top:auto;
+    }
+    .s5 .cta-box span { display:block; font-size:9px; font-weight:400; color:rgba(255,255,255,0.5); margin-top:2px; }
+    .s5 .footer {
+      margin-top:12px; padding-top:10px;
+      border-top:1px solid rgba(31,41,51,0.08);
+      display:flex; justify-content:space-between;
+    }
+    .s5 .brand { font-family:'Poppins',sans-serif; font-size:9px; font-weight:700; color:rgba(31,41,51,0.3); letter-spacing:0.1em; }
+    .s5 .paw {
+      font-size:18px; position:absolute; right:16px; bottom:16px; opacity:0.12;
+    }
+    /* bubble in CTA slide */
+    .s5::before {
+      content:''; position:absolute;
+      width:120px; height:120px; border-radius:50%;
+      background:rgba(255,255,255,0.3);
+      top:-30px; right:-30px;
+    }
+    .s5::after {
+      content:''; position:absolute;
+      width:80px; height:80px; border-radius:50%;
+      background:rgba(255,255,255,0.15);
+      bottom:-20px; left:-20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>WashDog — 5-Slide Carousel Template</h1>
+<p class="intro">Carrusel reutilizable · Contenido: Dog Tip · 1080×1080 por slide · Vista reducida</p>
+
+<div class="carousel-row">
+
+  <!-- ── Slide 1: Hook ── -->
+  <div>
+    <div class="slide-label">Slide 1 — Hook</div>
+    <div class="slide s1">
+      <div class="slide-inner">
+        <div class="top-bar"></div>
+        <div class="inner">
+          <div class="badge">Tip de la semana</div>
+          <div class="big-num">01</div>
+          <h2>¿El pavimento en Santiago puede <em>quemar las patas</em> de tu perro?</h2>
+          <div class="swipe">Desliza para saber cómo protegerlo →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 2: Content ── -->
+  <div>
+    <div class="slide-label">Slide 2 — Contenido</div>
+    <div class="slide s-content">
+      <div class="slide-inner">
+        <div class="top-bar"></div>
+        <div class="inner">
+          <div class="step-num">Paso 1 de 3</div>
+          <h3>Prueba el asfalto con tu mano</h3>
+          <p class="body">Si no puedes apoyar la palma durante 5 segundos, está demasiado caliente. El asfalto seco puede superar los 60°C en verano.</p>
+          <div class="img-ph">Ilustración aquí</div>
+          <div class="footer">
+            <span class="brand">WASHDOG</span>
+            <div class="progress">
+              <div class="dot on"></div><div class="dot on"></div>
+              <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 3: Content ── -->
+  <div>
+    <div class="slide-label">Slide 3 — Contenido</div>
+    <div class="slide s-content">
+      <div class="slide-inner">
+        <div class="top-bar"></div>
+        <div class="inner">
+          <div class="step-num">Paso 2 de 3</div>
+          <h3>Elige el horario correcto</h3>
+          <p class="body">Pasea antes de las 9am o después de las 7pm. Cerca de parques con sombra y pasto la superficie se enfría mucho más rápido que en el asfalto.</p>
+          <div class="img-ph">Ilustración aquí</div>
+          <div class="footer">
+            <span class="brand">WASHDOG</span>
+            <div class="progress">
+              <div class="dot on"></div><div class="dot on"></div>
+              <div class="dot on"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 4: Content ── -->
+  <div>
+    <div class="slide-label">Slide 4 — Contenido</div>
+    <div class="slide s-content">
+      <div class="slide-inner">
+        <div class="top-bar"></div>
+        <div class="inner">
+          <div class="step-num">Paso 3 de 3</div>
+          <h3>Revisa sus almohadillas al llegar a casa</h3>
+          <p class="body">Busca enrojecimiento, ampollas o grietas. Un grooming regular ayuda a mantenerlas hidratadas y a detectar problemas a tiempo.</p>
+          <div class="img-ph">Ilustración aquí</div>
+          <div class="footer">
+            <span class="brand">WASHDOG</span>
+            <div class="progress">
+              <div class="dot on"></div><div class="dot on"></div>
+              <div class="dot on"></div><div class="dot on"></div><div class="dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 5: CTA ── -->
+  <div>
+    <div class="slide-label">Slide 5 — CTA Newsletter</div>
+    <div class="slide s5">
+      <div class="slide-inner">
+        <div class="inner">
+          <div class="eyebrow">Newsletter semanal · Gratis</div>
+          <h2>Recibe tips como este cada semana</h2>
+          <div class="cta-box">
+            Suscríbete en washdog.cl/newsletter
+            <span>Santiago a Cuatro Patas — guía semanal para dueños de perros</span>
+          </div>
+          <div class="footer">
+            <span class="brand">WASHDOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

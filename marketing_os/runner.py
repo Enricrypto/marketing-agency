@@ -12,7 +12,7 @@ from pathlib import Path
 
 # Carga variables de entorno desde .env (debe existir con ANTHROPIC_API_KEY)
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(override=True)
 
 import anthropic
 

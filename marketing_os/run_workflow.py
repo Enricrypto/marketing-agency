@@ -38,7 +38,8 @@ def _print_result(result: dict) -> None:
     scores = result.get("scores", {})
     if scores:
         overall = scores.get("overall_score", 0)
-        bar = "█" * int(overall // 10) + "░" * (10 - int(overall // 10))
+        blocks = min(max(int(overall // 10), 0), 10)
+        bar = "█" * blocks + "░" * (10 - blocks)
         print(f"\n  Scores [{bar}] {overall}/100")
         print(f"    SEO:          {scores.get('seo_score', 0)}/100")
         print(f"    Legibilidad:  {scores.get('readability_score', 0)}/100")

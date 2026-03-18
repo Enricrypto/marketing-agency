@@ -1,0 +1,113 @@
+{
+  "strategy": {
+    "note": "Use 8–12 hashtags per post. Mix 1 from each group + 2-3 from pillar-specific.",
+    "placement": "First comment (not caption) to keep caption clean.",
+    "rotation": "Rotate sets A/B/C weekly to avoid shadowban patterns."
+  },
+
+  "always_include": [
+    "#perrossantiago",
+    "#washdog",
+    "#santiagoconperros"
+  ],
+
+  "groups": {
+    "local": {
+      "description": "Barrio + city — high local intent",
+      "tags": [
+        "#perrossantiago",
+        "#santiagoconperros",
+        "#nunoa",
+        "#providencia",
+        "#lascondes",
+        "#vitacura",
+        "#macul",
+        "#santiagodechile",
+        "#perroschile",
+        "#dogfriendlysantiago",
+        "#santiagopet"
+      ]
+    },
+    "service": {
+      "description": "Grooming + wash — captures service intent",
+      "tags": [
+        "#peluqueriacanina",
+        "#peluqueriacaninasantiago",
+        "#banocanino",
+        "#groomingcanino",
+        "#autolavadoperros",
+        "#groomingnunoa",
+        "#cuidadocanino",
+        "#esteticacanina",
+        "#cortepelos",
+        "#peluqueriamascota"
+      ]
+    },
+    "lifestyle": {
+      "description": "Dog lifestyle — high engagement, saves, shares",
+      "tags": [
+        "#perrosfelices",
+        "#doglife",
+        "#perrosdechile",
+        "#duenosdeperros",
+        "#mascotas",
+        "#doglovers",
+        "#perrosadictos",
+        "#vidaconperros",
+        "#perrosamigos",
+        "#dogsofinstagram"
+      ]
+    },
+    "newsletter": {
+      "description": "Use on newsletter-related posts",
+      "tags": [
+        "#santiagoacuatropatas",
+        "#newsletterperros",
+        "#guiaperruna",
+        "#parquesperros",
+        "#cafecanino"
+      ]
+    },
+    "tips": {
+      "description": "Use on educational tip content — drives saves",
+      "tags": [
+        "#tipcanino",
+        "#consejocanino",
+        "#saludcanina",
+        "#cuidadoperros",
+        "#educacioncanina",
+        "#bienestarcanino"
+      ]
+    }
+  },
+
+  "sets": {
+    "set_A": {
+      "use_for": "Tip posts, educational carousels",
+      "tags": [
+        "#perrossantiago", "#santiagoconperros", "#nunoa",
+        "#peluqueriacanina", "#cuidadocanino", "#tipcanino",
+        "#consejocanino", "#saludcanina", "#perrosfelices",
+        "#doglovers", "#washdog"
+      ]
+    },
+    "set_B": {
+      "use_for": "Park recommendations, dog-friendly spots",
+      "tags": [
+        "#perrossantiago", "#dogfriendlysantiago", "#santiagodechile",
+        "#santiagoacuatropatas", "#parquesperros", "#vidaconperros",
+        "#perroschile", "#duenosdeperros", "#nunoa",
+        "#washdog", "#santiagoconperros"
+      ]
+    },
+    "set_C": {
+      "use_for": "Service posts, client features",
+      "tags": [
+        "#peluqueriacaninasantiago", "#banocanino", "#groomingcanino",
+        "#autolavadoperros", "#esteticacanina", "#perrossantiago",
+        "#nunoa", "#cuidadocanino", "#dogsofinstagram",
+        "#washdog", "#mascotas"
+      ]
+    }
+  }
+}

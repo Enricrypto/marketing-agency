@@ -177,7 +177,8 @@ Retorna SOLO un JSON válido con exactamente estas claves:
     })
 
     # Barra visual de calidad
-    bar = "█" * (overall // 10) + "░" * (10 - overall // 10)
+    blocks = min(max(int(overall // 10), 0), 10)
+    bar = "█" * blocks + "░" * (10 - blocks)
     print(
         f"[evaluator] [{bar}] {overall}/100  "
         f"SEO:{seo}  Read:{read}  Conv:{conv}  Local:{local}"

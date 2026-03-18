@@ -173,6 +173,8 @@ marketing_os/
 ├── runner.py                       # Phase 0-3 — Core agent runner
 ├── scheduler.py                    # Phase 5-6 — Weekly scheduler
 ├── run_workflow.py                 # Phase 4 — Workflow CLI
+├── run_nunoa.sh                    # Batch runner — all 4 Ñuñoa service pages
+├── sync_sheets.py                  # Sync SQLite results → Google Sheets tracking
 │
 ├── requirements.txt
 ├── .env                            # ← you create this (not in git)
@@ -240,6 +242,28 @@ python run_workflow.py campaign \
 # View analytics report
 python run_workflow.py report
 ```
+
+### Run all Ñuñoa service pages
+
+```bash
+# Generate all 4 landing pages + 4 blog posts for the Ñuñoa services
+./run_nunoa.sh
+
+# Landing pages only
+./run_nunoa.sh --landing
+
+# Blog posts only
+./run_nunoa.sh --blog
+```
+
+All output is logged to `outputs/logs/nunoa_run_<timestamp>.log`. The 4 Ñuñoa services covered:
+
+| Service | Blog keyword |
+|---|---|
+| Peluquería canina Ñuñoa | peluquería canina Ñuñoa |
+| Auto lavado perros Ñuñoa | auto lavado perros Ñuñoa |
+| Peluquería gatos Ñuñoa | peluquería gatos Ñuñoa |
+| Precio peluquería Ñuñoa | precio peluquería canina Ñuñoa |
 
 ### Run the weekly scheduler
 
@@ -425,6 +449,22 @@ python run_workflow.py landing \
   --location "Ñuñoa" \
   --promotion "primera visita $19.990 CLP"
 ```
+
+**Current service pages (all in `_BUSINESS_CONTEXT`):**
+
+| Service | Canonical URL |
+|---|---|
+| Baño completo | `/servicios/bano-completo` |
+| Corte de pelo canino | `/servicios/corte-pelo-canino` |
+| Tratamiento antipulgas | `/servicios/antipulgas` |
+| Deslanado | `/servicios/deslanado` |
+| Corte y lima de uñas | `/servicios/corte-unas` |
+| Peluquería canina Ñuñoa | `/servicios/peluqueria-canina-nunoa` |
+| Auto lavado perros Ñuñoa | `/servicios/auto-lavado-perros-nunoa` |
+| Peluquería gatos Ñuñoa | `/servicios/peluqueria-gatos-nunoa` |
+| Precio peluquería Ñuñoa | `/servicios/precio-peluqueria-nunoa` |
+
+These URLs are the canonical list used by `blog_seo.py` when generating internal links. To add a new service page, update `_BUSINESS_CONTEXT` in both `workflows/landing_page.py` and `workflows/blog_seo.py`, and add its URL to the internal link prompt in `blog_seo.py`.
 
 #### 3. Seasonal Campaign Workflow (`seasonal_campaign.py`)
 
@@ -680,6 +720,17 @@ export async function getStaticProps({ params }) {
 
 Close the feedback loop: read real-world performance data (GA4, Search Console) back into the `performance_metrics` table, enabling data-driven content decisions.
 
+### Recommended integration sequence
+
+Follow these steps in order — each one unblocks the next:
+
+1. **Run `run_nunoa.sh`** — populate the DB with all Ñuñoa landing pages and blog posts. Verify scorer output is stable (no `TypeError` from float bars).
+2. **Add Google Workspace credentials** — place `credentials.json` in `workspace/`. Run any workflow to trigger the OAuth browser flow and generate `.token.json`.
+3. **Test Docs/Sheets sync** — run a single landing page workflow and confirm it appears in `MarketingOS/docs/` in your Drive.
+4. **Add GA4 integration** — create `analytics/import_ga4.py` (see tasks below). Connect the `performance_metrics` table to real page view and conversion data.
+5. **Expand to Search Console** — add `analytics/import_search_console.py` to pull ranking data (impressions, clicks, avg position) per service page URL.
+6. **Connect Ads and other Google services** — once GA4 and Search Console are stable, wire in Google Ads conversion data to close the ROI loop.
+
 ### Extended `performance_metrics` schema
 
 ```sql
@@ -719,11 +770,13 @@ performance_metrics (
 
 ### Implementation tasks (Phase 8)
 
-- [ ] Create `analytics/import_ga4.py` — fetches data from GA4 Data API
-- [ ] Create `analytics/import_search_console.py` — fetches Search Console data
+- [ ] Create `analytics/import_ga4.py` — fetches data from GA4 Data API; writes to `performance_metrics`
+- [ ] Create `analytics/import_search_console.py` — fetches impressions, clicks, avg position per URL
+- [ ] Add `url` column to `performance_metrics` table (migration in `db.py`)
 - [ ] Schedule weekly import via `scheduler.py` (new `analytics-import` step)
-- [ ] Add `analytics/kpi_report.py` — WashDog-specific KPI dashboard
-- [ ] Update `analytics/queries.py` with real-performance queries
+- [ ] Add `analytics/kpi_report.py` — WashDog KPI dashboard (bookings, WhatsApp clicks, revenue CLP)
+- [ ] Update `analytics/queries.py` with real-performance joins (content score vs. actual traffic)
+- [ ] Connect Google Ads conversion data for cost-per-booking tracking
 
 ---
 
@@ -944,6 +997,84 @@ Variables are loaded from `.env` automatically via `python-dotenv`.
 | Full month | ~50 agents | mixed | ~$3.60 |
 
 **Monthly budget:** $20 USD · **Typical spend:** ~$3.60 USD · **Margin:** ~$16.40 USD
+
+---
+
+---
+
+## Phase 2 — Programmatic Local SEO Expansion
+
+Generates landing pages at scale: **6 services × 28 communes = 168 pages** targeting local keywords like `peluquería canina Providencia`, `baño perros Vitacura`, etc.
+
+### New Files
+
+| File | Purpose |
+|---|---|
+| `keywords/communes.csv` | 28 Santiago communes (slug + display name) |
+| `keywords/services.csv` | 6 WashDog services (slug + display name) |
+| `page_registry.py` | CRUD helpers for the `pages` DB table |
+| `generate_local_pages.py` | Populates the registry with all combinations |
+| `run_pending_pages.py` | Runs workflows for pending pages, N per batch |
+
+### Database Table: `pages`
+
+Tracks every service × commune combination and prevents duplicate generation.
+
+| Column | Description |
+|---|---|
+| `page_id` | `{service_slug}__{commune_slug}` — deterministic primary key |
+| `status` | `pending` → `generated` → `published` / `failed` |
+| `workflow_id` | Links to the `workflows` table after generation |
+
+### Quick Start
+
+```bash
+# 1. Register all 168 combinations (run once)
+cd marketing_os
+.venv/bin/python generate_local_pages.py --init
+
+# Preview without writing
+.venv/bin/python generate_local_pages.py --init --dry-run
+
+# 2. Check the registry
+.venv/bin/python generate_local_pages.py --status
+.venv/bin/python generate_local_pages.py --list
+
+# 3. Generate first batch (10 pages)
+.venv/bin/python run_pending_pages.py --batch 10
+
+# Safe test with a single page
+.venv/bin/python run_pending_pages.py --batch 1
+
+# 4. Sync to Google Sheets
+.venv/bin/python sync_sheets.py --all --best-only
+```
+
+### Cron Schedule
+
+```
+# Daily: generate 10 new pages — 06:00
+0 6 * * *  .venv/bin/python run_pending_pages.py --batch 10
+
+# Daily: sync to Sheets — 06:30
+30 6 * * * .venv/bin/python sync_sheets.py --all --best-only
+
+# Weekly: analytics import — Mondays 07:00
+0 7 * * 1  .venv/bin/python sync_analytics.py --days 7
+```
+
+At 10 pages/day the full 168-page corpus is generated in **~17 days**.
+
+### Generated URL Pattern
+
+```
+/servicios/{service-slug}-{commune-slug}
+
+Examples:
+  /servicios/peluqueria-canina-providencia
+  /servicios/bano-perros-vitacura
+  /servicios/spa-canino-las-condes
+```
 
 ---
 

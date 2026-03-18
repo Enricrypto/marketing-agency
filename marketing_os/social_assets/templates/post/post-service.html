@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>WashDog Post — Service Explanation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#2F80ED; --yellow:#F2C94C; --aqua:#BEE9F7; --charcoal:#1F2933; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:#e2e8f0; display:flex; flex-direction:column; align-items:center; gap:32px; padding:60px 40px; }
+    .label { font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#64748b; align-self:flex-start; }
+
+    .canvas {
+      width:540px; height:540px;
+      background:var(--blue);
+      position:relative; overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+
+    /* Water gradient */
+    .canvas::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(160deg, rgba(190,233,247,0.15) 0%, transparent 60%, rgba(242,201,76,0.06) 100%);
+      pointer-events:none;
+    }
+
+    /* Bubble circles deco */
+    .bubbles { position:absolute; inset:0; pointer-events:none; }
+
+    .top-bar { height:5px; background:var(--yellow); flex-shrink:0; }
+
+    .inner {
+      flex:1; padding:36px 40px;
+      display:flex; flex-direction:column;
+      position:relative; z-index:1;
+    }
+
+    .eyebrow {
+      font-size:10px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase;
+      color:rgba(255,255,255,0.5); margin-bottom:14px;
+    }
+
+    h2 {
+      font-family:'Poppins',sans-serif; font-size:28px; font-weight:800;
+      color:white; line-height:1.2; letter-spacing:-0.02em; margin-bottom:24px;
+    }
+    h2 em { color:var(--yellow); font-style:normal; }
+
+    /* Steps */
+    .steps { display:flex; flex-direction:column; gap:14px; flex:1; }
+    .step { display:flex; align-items:flex-start; gap:14px; }
+    .step-num {
+      width:32px; height:32px; border-radius:50%; flex-shrink:0;
+      background:rgba(255,255,255,0.12);
+      border:1.5px solid rgba(255,255,255,0.2);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:var(--yellow);
+    }
+    .step-text { font-size:14px; font-weight:500; color:rgba(255,255,255,0.85); line-height:1.4; padding-top:6px; }
+    .step-text small { display:block; font-size:12px; font-weight:400; color:rgba(255,255,255,0.45); margin-top:2px; }
+
+    /* Price tag */
+    .price-tag {
+      margin-top:auto;
+      background:var(--yellow); color:var(--charcoal);
+      font-family:'Poppins',sans-serif; font-size:13px; font-weight:800;
+      padding:10px 18px; border-radius:12px; align-self:flex-start;
+      margin-bottom:16px;
+    }
+
+    .footer {
+      padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand { font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:rgba(255,255,255,0.25); letter-spacing:0.1em; }
+    .cta-link { font-size:11px; color:var(--aqua); font-weight:600; }
+  </style>
+</head>
+<body>
+
+<div class="label">Template 3 — Service Explanation (1080×1080)</div>
+
+<div class="canvas">
+  <svg class="bubbles" viewBox="0 0 540 540">
+    <circle cx="480" cy="80"  r="100" fill="none" stroke="white" stroke-opacity="0.04" stroke-width="2"/>
+    <circle cx="480" cy="80"  r="60"  fill="none" stroke="white" stroke-opacity="0.03" stroke-width="2"/>
+    <circle cx="60"  cy="450" r="140" fill="none" stroke="white" stroke-opacity="0.03" stroke-width="2"/>
+    <circle cx="300" cy="300" r="200" fill="none" stroke="white" stroke-opacity="0.02" stroke-width="2"/>
+  </svg>
+
+  <div class="top-bar"></div>
+
+  <div class="inner">
+    <div class="eyebrow">Cómo funciona</div>
+    <h2>Autolavado para perros en <em>3 pasos</em></h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          Elige tu cabina y prepara a tu perro
+          <small>Rampas antideslizantes y amarras de seguridad incluidas</small>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          Shampoo, acondicionador y secador — todo disponible
+          <small>Productos profesionales incluidos en el precio</small>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          Listo en 30–45 minutos
+          <small>Sin cita previa, sin esperas. Tu perro, tus manos, tu ritmo</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="price-tag">Desde $X.XXX CLP · Sin reserva previa</div>
+
+    <div class="footer">
+      <span class="brand">WASHDOG · ÑUÑOA</span>
+      <span class="cta-link">washdog.cl</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

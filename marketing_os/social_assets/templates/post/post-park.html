@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>WashDog Post — Park Recommendation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:#2F80ED; --yellow:#F2C94C; --aqua:#BEE9F7;
+      --charcoal:#1F2933; --green:#22c55e; --green-light:#dcfce7;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:#e2e8f0; display:flex; flex-direction:column; align-items:center; gap:32px; padding:60px 40px; }
+    .label { font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#64748b; align-self:flex-start; }
+
+    .canvas {
+      width:540px; height:540px;
+      position:relative; overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+
+    /* Park: aqua/green light tone */
+    .bg-park {
+      background:linear-gradient(160deg, #e8f5e9 0%, #e0f4fc 50%, #f0faff 100%);
+    }
+
+    /* Photo area */
+    .photo-area {
+      height:230px; width:100%; flex-shrink:0;
+      background:linear-gradient(135deg, #a8d5b5 0%, #7ecbdd 100%);
+      position:relative; overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .photo-area .placeholder-text {
+      font-family:'Inter',sans-serif; font-size:13px; font-weight:600;
+      color:rgba(255,255,255,0.6); letter-spacing:0.08em; text-transform:uppercase;
+    }
+    /* Top bar */
+    .photo-area::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:5px;
+      background:linear-gradient(90deg,var(--blue),var(--aqua),var(--green));
+    }
+    /* Category badge overlaid on photo */
+    .photo-badge {
+      position:absolute; top:16px; left:16px;
+      background:rgba(255,255,255,0.92); backdrop-filter:blur(4px);
+      color:var(--green); font-size:10px; font-weight:700;
+      padding:6px 12px; border-radius:100px;
+      letter-spacing:0.12em; text-transform:uppercase;
+      display:flex; align-items:center; gap:5px;
+    }
+
+    /* Content area */
+    .content {
+      flex:1; padding:24px 32px 28px;
+      display:flex; flex-direction:column;
+      position:relative; z-index:1;
+    }
+
+    h2 {
+      font-family:'Poppins',sans-serif;
+      font-size:22px; font-weight:800;
+      color:var(--charcoal); line-height:1.2;
+      letter-spacing:-0.015em; margin-bottom:8px;
+    }
+
+    .meta {
+      display:flex; align-items:center; gap:12px;
+      margin-bottom:12px;
+    }
+    .meta-item {
+      display:flex; align-items:center; gap:5px;
+      font-size:11px; font-weight:500;
+      color:rgba(31,41,51,0.5);
+    }
+    .meta-item svg { width:13px; height:13px; }
+
+    .body-text {
+      font-size:13px; line-height:1.6;
+      color:rgba(31,41,51,0.65); flex:1;
+    }
+
+    /* Quick facts chips */
+    .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+    .chip {
+      background:rgba(47,128,237,0.08);
+      color:var(--blue); font-size:10.5px; font-weight:600;
+      padding:4px 10px; border-radius:100px;
+    }
+    .chip.green { background:rgba(34,197,94,0.1); color:var(--green); }
+    .chip.yellow { background:rgba(242,201,76,0.15); color:#b45309; }
+
+    /* Footer */
+    .footer {
+      margin-top:auto; padding-top:12px;
+      border-top:1px solid rgba(31,41,51,0.06);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand { font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:rgba(31,41,51,0.25); letter-spacing:0.1em; }
+    .cta-small {
+      font-size:10.5px; font-weight:700;
+      color:var(--blue); letter-spacing:0.04em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="label">Template 2 — Park Recommendation (1080×1080)</div>
+
+<div class="canvas bg-park">
+
+  <!-- Photo -->
+  <div class="photo-area">
+    <div class="photo-badge">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      Parque dog-friendly
+    </div>
+    <span class="placeholder-text">Foto del parque aquí</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <h2>Parque Inés de Suárez</h2>
+
+    <div class="meta">
+      <div class="meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Providencia / Ñuñoa
+      </div>
+      <div class="meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        Abierto todos los días
+      </div>
+    </div>
+
+    <p class="body-text">
+      Sombra real, zonas de pasto y espacio para correr sin correa. Ideal para un paseo de fin de semana — y para estrenar el pelaje recién cortado.
+    </p>
+
+    <div class="chips">
+      <span class="chip green">Perros sin correa</span>
+      <span class="chip">Sombra</span>
+      <span class="chip">Bebederos</span>
+      <span class="chip yellow">Fin de semana</span>
+    </div>
+
+    <div class="footer">
+      <span class="brand">WASHDOG</span>
+      <span class="cta-small">Newsletter → washdog.cl/newsletter</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

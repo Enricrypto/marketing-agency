@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <circle cx="540" cy="540" r="540" fill="#2F80ED"/>
+  <circle cx="540" cy="540" r="380" fill="rgba(255,255,255,0.04)"/>
+  <!-- Map pin with paw inside -->
+  <path d="M540 120 C360 120 210 270 210 450 C210 660 540 940 540 940 C540 940 870 660 870 450 C870 270 720 120 540 120Z" fill="none" stroke="white" stroke-width="38" stroke-linejoin="round"/>
+  <!-- Paw inside pin -->
+  <ellipse cx="540" cy="490" rx="80" ry="65" fill="none" stroke="white" stroke-width="30"/>
+  <ellipse cx="420" cy="400" rx="48" ry="58" fill="none" stroke="white" stroke-width="28"/>
+  <ellipse cx="660" cy="400" rx="48" ry="58" fill="none" stroke="white" stroke-width="28"/>
+  <ellipse cx="456" cy="320" rx="38" ry="48" fill="none" stroke="white" stroke-width="26"/>
+  <ellipse cx="624" cy="320" rx="38" ry="48" fill="none" stroke="white" stroke-width="26"/>
+</svg>

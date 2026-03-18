@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <circle cx="540" cy="540" r="540" fill="#1F2933"/>
+  <circle cx="540" cy="540" r="380" fill="rgba(255,255,255,0.03)"/>
+  <!-- Speech bubble -->
+  <path d="M160 180 Q160 120 220 120 L860 120 Q920 120 920 180 L920 620 Q920 680 860 680 L420 680 L260 840 L260 680 Q160 680 160 620 Z" fill="none" stroke="white" stroke-width="38" stroke-linejoin="round"/>
+  <!-- Question mark -->
+  <path d="M440 340 Q440 250 540 250 Q640 250 640 340 Q640 430 540 460" stroke="white" stroke-width="44" stroke-linecap="round" fill="none"/>
+  <circle cx="540" cy="565" r="30" fill="white"/>
+</svg>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+
+  <!-- SERVICIOS — dog paw -->
+  <symbol id="icon-servicios" viewBox="0 0 48 48">
+    <ellipse cx="24" cy="32" rx="11" ry="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="11" cy="22" rx="4" ry="5.5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <ellipse cx="37" cy="22" rx="4" ry="5.5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <ellipse cx="17" cy="14" rx="3.5" ry="4.5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <ellipse cx="31" cy="14" rx="3.5" ry="4.5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  </symbol>
+
+  <!-- AUTOLAVADO — shower head -->
+  <symbol id="icon-autolavado" viewBox="0 0 48 48">
+    <path d="M10 8 Q10 4 14 4 L34 4 Q38 4 38 8 L38 20 Q38 24 34 24 L14 24 Q10 24 10 20 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+    <line x1="24" y1="24" x2="24" y2="30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="16" y1="34" x2="16" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="24" y1="34" x2="24" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="32" y1="34" x2="32" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="20" y1="38" x2="20" y2="43" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="28" y1="38" x2="28" y2="43" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- PELUQUERIA — scissors -->
+  <symbol id="icon-peluqueria" viewBox="0 0 48 48">
+    <circle cx="12" cy="36" r="5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <line x1="16.5" y1="32.5" x2="38" y2="11" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="16.5" y1="15.5" x2="38" y2="37" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="36" cy="24" r="1.5" fill="currentColor"/>
+  </symbol>
+
+  <!-- CLIENTES — dog face -->
+  <symbol id="icon-clientes" viewBox="0 0 48 48">
+    <ellipse cx="24" cy="26" rx="14" ry="13" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <ellipse cx="14" cy="18" rx="5" ry="7" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <ellipse cx="34" cy="18" rx="5" ry="7" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <circle cx="20" cy="25" r="1.8" fill="currentColor"/>
+    <circle cx="28" cy="25" r="1.8" fill="currentColor"/>
+    <path d="M20 31 Q24 34 28 31" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- TIPS — lightbulb + paw -->
+  <symbol id="icon-tips" viewBox="0 0 48 48">
+    <path d="M24 6 C16 6 10 12 10 20 C10 25 13 29 17 32 L17 37 Q17 39 19 39 L29 39 Q31 39 31 37 L31 32 C35 29 38 25 38 20 C38 12 32 6 24 6Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+    <line x1="19" y1="42" x2="29" y2="42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="21" y1="45" x2="27" y2="45" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="24" y1="12" x2="24" y2="26" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 3"/>
+  </symbol>
+
+  <!-- FAQ — speech bubble + question -->
+  <symbol id="icon-faq" viewBox="0 0 48 48">
+    <path d="M6 8 Q6 4 10 4 L38 4 Q42 4 42 8 L42 30 Q42 34 38 34 L18 34 L10 42 L10 34 Q6 34 6 30 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M20 16 Q20 12 24 12 Q28 12 28 16 Q28 20 24 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <circle cx="24" cy="26" r="1.5" fill="currentColor"/>
+  </symbol>
+
+  <!-- NEWSLETTER — envelope + paw -->
+  <symbol id="icon-newsletter" viewBox="0 0 48 48">
+    <rect x="4" y="12" width="40" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <path d="M4 14 L24 27 L44 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="35" cy="10" rx="3.5" ry="4.5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <ellipse cx="42" cy="13" rx="2.5" ry="3" fill="none" stroke="currentColor" stroke-width="2"/>
+  </symbol>
+
+  <!-- CONTACTO — location pin -->
+  <symbol id="icon-contacto" viewBox="0 0 48 48">
+    <path d="M24 4 C15 4 8 11 8 20 C8 31 24 44 24 44 C24 44 40 31 40 20 C40 11 33 4 24 4Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="24" cy="20" r="5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  </symbol>
+
+</svg>

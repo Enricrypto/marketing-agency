@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <circle cx="540" cy="540" r="540" fill="#F2C94C"/>
+  <circle cx="540" cy="540" r="380" fill="rgba(31,41,51,0.04)"/>
+  <!-- Lightbulb -->
+  <path d="M540 170 C388 170 266 292 266 444 C266 540 314 620 392 672 L392 756 Q392 790 424 790 L656 790 Q688 790 688 756 L688 672 C766 620 814 540 814 444 C814 292 692 170 540 170Z" fill="none" stroke="#1F2933" stroke-width="38" stroke-linejoin="round"/>
+  <line x1="410" y1="840" x2="670" y2="840" stroke="#1F2933" stroke-width="38" stroke-linecap="round"/>
+  <line x1="450" y1="900" x2="630" y2="900" stroke="#1F2933" stroke-width="32" stroke-linecap="round"/>
+  <!-- Paw inside bulb -->
+  <ellipse cx="540" cy="530" rx="54" ry="46" fill="#1F2933" opacity="0.5"/>
+  <ellipse cx="440" cy="452" rx="36" ry="46" fill="#1F2933" opacity="0.4"/>
+  <ellipse cx="640" cy="452" rx="36" ry="46" fill="#1F2933" opacity="0.4"/>
+  <ellipse cx="472" cy="378" rx="30" ry="38" fill="#1F2933" opacity="0.3"/>
+  <ellipse cx="608" cy="378" rx="30" ry="38" fill="#1F2933" opacity="0.3"/>
+</svg>

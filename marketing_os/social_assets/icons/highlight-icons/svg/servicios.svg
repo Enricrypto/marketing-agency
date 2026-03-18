@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <circle cx="540" cy="540" r="540" fill="#2F80ED"/>
+  <circle cx="540" cy="540" r="480" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="2"/>
+  <circle cx="540" cy="540" r="380" fill="rgba(255,255,255,0.04)"/>
+  <!-- Paw icon, centered 540,540 at scale ~400px -->
+  <ellipse cx="540" cy="620" rx="165" ry="132" fill="none" stroke="white" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="336" cy="480" rx="72" ry="95" fill="none" stroke="white" stroke-width="38"/>
+  <ellipse cx="744" cy="480" rx="72" ry="95" fill="none" stroke="white" stroke-width="38"/>
+  <ellipse cx="430" cy="356" rx="62" ry="80" fill="none" stroke="white" stroke-width="38"/>
+  <ellipse cx="650" cy="356" rx="62" ry="80" fill="none" stroke="white" stroke-width="38"/>
+</svg>
