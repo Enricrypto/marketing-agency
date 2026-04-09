@@ -69,6 +69,8 @@ def _collect_static_pages() -> list[dict]:
     return [
         {"url": BASE_URL,                                                    "priority": "1.0", "changefreq": "weekly"},
         {"url": f"{BASE_URL}/blog",                                          "priority": "0.8", "changefreq": "weekly"},
+        {"url": f"{BASE_URL}/servicios",                                     "priority": "0.8", "changefreq": "monthly"},
+        {"url": f"{BASE_URL}/newsletter",                                    "priority": "0.7", "changefreq": "weekly"},
         # Hardcoded Next.js app routes (not markdown-driven)
         {"url": f"{BASE_URL}/servicios/auto-lavado-perros-nunoa",            "priority": "0.9", "changefreq": "monthly"},
         {"url": f"{BASE_URL}/servicios/bano",                                "priority": "0.9", "changefreq": "monthly"},
@@ -76,9 +78,27 @@ def _collect_static_pages() -> list[dict]:
         {"url": f"{BASE_URL}/servicios/peluqueria-canina-nunoa",             "priority": "0.9", "changefreq": "monthly"},
         {"url": f"{BASE_URL}/servicios/peluqueria-gatos-nunoa",              "priority": "0.9", "changefreq": "monthly"},
         {"url": f"{BASE_URL}/servicios/precio-peluqueria-nunoa",             "priority": "0.9", "changefreq": "monthly"},
-        {"url": f"{BASE_URL}/privacy",                                       "priority": "0.3", "changefreq": "yearly"},
-        {"url": f"{BASE_URL}/terms",                                         "priority": "0.3", "changefreq": "yearly"},
+        # Note: /privacy and /terms are noindex — excluded from sitemap intentionally
     ]
+
+
+def _collect_newsletter_pages() -> list[dict]:
+    """Scans content/newsletter/*.md and returns one entry per issue."""
+    newsletter_dir = _NEXTJS_DIR / "content" / "newsletter"
+    if not newsletter_dir.exists():
+        return []
+    pages = []
+    for md_file in sorted(newsletter_dir.glob("*.md")):
+        slug = md_file.stem  # e.g. "issue-1"
+        pages.append({
+            "url":        f"{BASE_URL}/newsletter/{slug}",
+            "priority":   "0.5",
+            "changefreq": "never",
+            "lastmod":    datetime.fromtimestamp(
+                md_file.stat().st_mtime, tz=timezone.utc
+            ).strftime("%Y-%m-%d"),
+        })
+    return pages
 
 
 def _collect_blog_pages() -> list[dict]:
@@ -213,9 +233,10 @@ def write_xml_sitemap(pages: list[dict], dry_run: bool = False) -> None:
 def generate(dry_run: bool = False) -> None:
     init_db()
 
-    static_pages  = _collect_static_pages()
-    blog_pages    = _collect_blog_pages()
-    service_pages = _collect_service_pages()
+    static_pages      = _collect_static_pages()
+    blog_pages        = _collect_blog_pages()
+    newsletter_pages  = _collect_newsletter_pages()
+    service_pages     = _collect_service_pages()
     prog_deployed, prog_pending = _collect_programmatic_pages()
 
     # Service pages from filesystem already includes the Ñuñoa + any programmatic ones.
@@ -229,12 +250,14 @@ def generate(dry_run: bool = False) -> None:
         static_pages
         + list(all_service_pages.values())
         + blog_pages
+        + newsletter_pages
     )
 
     log.info(
         f"Sitemap: {len(static_pages)} static | "
         f"{len(all_service_pages)} service | "
         f"{len(blog_pages)} blog | "
+        f"{len(newsletter_pages)} newsletter | "
         f"Total: {len(all_pages)} URLs"
     )
 
