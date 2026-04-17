@@ -39,6 +39,32 @@ BASE_URL      = "https://www.washdog.cl"
 _WEBSITE_DIR  = Path(os.environ.get("WASHDOG_WEBSITE_DIR", "/Users/enriqueibarra/washdog-website"))
 _CONTENT_DIR  = _WEBSITE_DIR / "content" / "servicios"
 
+# Service slugs that cover the same topic — generating both for the same commune
+# creates duplicate pages that Google deindexes one of (canonical conflict).
+_SERVICE_ALIAS_GROUPS: list[frozenset[str]] = [
+    frozenset({"corte-perros", "corte-pelo-perros"}),
+    frozenset({"bano-perros", "bano-canino"}),
+]
+
+
+def _find_alias_conflicts(service_slug: str, commune_slug: str) -> list[str]:
+    """Return existing .md slugs that cover the same topic+commune as the new page."""
+    if not _CONTENT_DIR.exists():
+        return []
+    alias_group = next(
+        (g for g in _SERVICE_ALIAS_GROUPS if service_slug in g), None
+    )
+    if not alias_group:
+        return []
+    conflicts = []
+    for alias in alias_group:
+        if alias == service_slug:
+            continue
+        candidate = _CONTENT_DIR / f"{alias}-{commune_slug}.md"
+        if candidate.exists():
+            conflicts.append(f"{alias}-{commune_slug}")
+    return conflicts
+
 # ── Logging ───────────────────────────────────────────────────────────────────
 
 _LOG_DIR = Path(__file__).parent / "logs"
@@ -97,6 +123,13 @@ def _deploy_page(slug: str, title: str, content: str, service_name: str, commune
     """
     _CONTENT_DIR.mkdir(parents=True, exist_ok=True)
     dest = _CONTENT_DIR / f"{slug}.md"
+
+    # Strip leading H1 + H2 subheadline — template renders servicio.title as <h1>;
+    # AI-generated content also starts with # H1 + ## Subheadline causing duplicates.
+    content = re.sub(r"^#\s+[^\n]*\n?", "", content.strip(), count=1)
+    content = re.sub(r"^\n*##\s+[^\n]*\n?", "", content)
+    content = re.sub(r"^(\n*---\n*)", "", content)
+    content = content.strip()
 
     new_content = _build_md_file(slug, title, content, service_name, commune_name)
 
@@ -195,6 +228,17 @@ def run_batch(batch: int = 10, dry_run: bool = False, no_index: bool = False) ->
         keyword      = page["keyword"]
 
         log.info(f"[{page_id}] Starting: '{keyword}'")
+
+        # Guard: skip if a semantically equivalent page already exists for this commune
+        conflicts = _find_alias_conflicts(service_slug, commune_slug)
+        if conflicts:
+            log.warning(
+                f"  [SKIP] '{slug}' conflicts with existing page(s): {conflicts}. "
+                f"Generating both would create canonical duplicates. "
+                f"Remove the conflicting page first or add a new alias group to _SERVICE_ALIAS_GROUPS."
+            )
+            failed += 1
+            continue
 
         if dry_run:
             log.info(

@@ -300,6 +300,45 @@ def enrich_blog_posts(dry_run: bool = False) -> None:
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
+def audit_broken_links() -> None:
+    """Scans all deployed .md files for internal links pointing to non-existent pages."""
+    servicios_dir = _NEXTJS_DIR / "content" / "servicios"
+    blog_dir      = _NEXTJS_DIR / "content" / "blog"
+    app_dir       = _NEXTJS_DIR / "src" / "app"
+    all_dirs      = [d for d in [servicios_dir, blog_dir] if d.exists()]
+
+    # Slugs from .md content files
+    existing_slugs = {
+        f.stem
+        for d in [servicios_dir, blog_dir] if d.exists()
+        for f in d.glob("*.md")
+    }
+
+    # Slugs from static Next.js app directory routes (e.g. app/servicios/bano/page.tsx)
+    for route_dir in [app_dir / "servicios", app_dir / "blog"]:
+        if route_dir.exists():
+            for entry in route_dir.iterdir():
+                if entry.is_dir() and not entry.name.startswith("[") and (entry / "page.tsx").exists():
+                    existing_slugs.add(entry.name)
+
+    broken: list[tuple[str, str]] = []
+    link_re = re.compile(r'\]\(/(?:servicios|blog)/([^/)]+)\)')
+
+    for d in all_dirs:
+        for f in d.glob("*.md"):
+            for match in link_re.finditer(f.read_text(encoding="utf-8")):
+                target = match.group(1)
+                if target not in existing_slugs:
+                    broken.append((f.name, target))
+
+    if broken:
+        log.warning(f"[audit] Found {len(broken)} broken internal link(s):")
+        for source, target in broken:
+            log.warning(f"  {source} → /servicios/{target} (404)")
+    else:
+        log.info("[audit] No broken internal links found. ✓")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog        = "enrich_internal_links.py",
@@ -310,15 +349,19 @@ Examples:
   python enrich_internal_links.py --all           # enrich DB pages + blog posts
   python enrich_internal_links.py --blog          # blog posts only
   python enrich_internal_links.py --all --dry-run # preview without writing
+  python enrich_internal_links.py --audit         # scan for broken internal links
         """,
     )
     parser.add_argument("--all",     action="store_true", help="Enrich DB landing pages + blog posts")
     parser.add_argument("--blog",    action="store_true", help="Enrich blog markdown files only")
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing")
+    parser.add_argument("--audit",   action="store_true", help="Scan all .md files for broken internal links")
 
     args = parser.parse_args()
 
-    if args.all:
+    if args.audit:
+        audit_broken_links()
+    elif args.all:
         enrich_generated_pages(dry_run=args.dry_run)
         enrich_blog_posts(dry_run=args.dry_run)
     elif args.blog:
