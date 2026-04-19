@@ -94,7 +94,8 @@ def main() -> None:
     parser.add_argument("--issue",       type=int,  default=None, help="Fuerza número de edición")
     parser.add_argument("--commune",     type=str,  default=None, help="Fuerza la comuna de foco")
     parser.add_argument("--dry-run",     action="store_true",     help="Genera pero no envía")
-    parser.add_argument("--draft-only",  action="store_true",     help="Genera borrador y guarda, no envía")
+    parser.add_argument("--draft-only",  action="store_true",     help="Genera borrador y guarda, no envía (default en cron)")
+    parser.add_argument("--send",        action="store_true",     help="Envía la newsletter (requiere aprobación explícita)")
     parser.add_argument("--no-instagram", action="store_true",   help="Skip Instagram post")
     parser.add_argument("--model",       type=str,  default="claude-sonnet-4-6")
     args = parser.parse_args()
@@ -111,6 +112,7 @@ def main() -> None:
         issue_number  = issue_number,
         focus_commune = focus_commune,
         model         = args.model,
+        current_date  = datetime.utcnow().strftime("%Y-%m-%d"),
     )
 
     draft_path, web_path = _save_draft(result, issue_number, focus_commune)
@@ -118,11 +120,13 @@ def main() -> None:
     print(f"[newsletter] Subject: {result['subject_line']}")
     print(f"[newsletter] Preview: {result['preview_text']}")
 
-    if args.draft_only:
-        print("[newsletter] --draft-only: terminando sin enviar.")
+    # Default: draft-only unless --send is explicitly passed
+    if not args.send or args.draft_only:
+        print("[newsletter] BORRADOR guardado — revisa el archivo antes de enviar.")
+        print(f"[newsletter] Para enviar: .venv/bin/python run_newsletter.py --issue {issue_number} --send")
         return
 
-    # ── Step 2: Enviar ───────────────────────────────────────────────────────
+    # ── Step 2: Enviar (solo con --send explícito) ───────────────────────────
     send_result = send_issue(
         issue_number  = issue_number,
         subject_line  = result["subject_line"],

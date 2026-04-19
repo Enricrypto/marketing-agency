@@ -52,6 +52,7 @@ def run_newsletter(
     issue_number: int,
     focus_commune: str = "Ñuñoa",
     model: str = "claude-sonnet-4-6",
+    current_date: str | None = None,
 ) -> dict:
     """
     Genera el borrador completo de la newsletter semanal.
@@ -65,6 +66,26 @@ def run_newsletter(
         dict con: workflow_id, issue_number, subject_line, preview_text,
                   body (markdown sin encabezado), sections (dict curado), full_draft
     """
+    from datetime import date as _date
+    import calendar as _calendar
+
+    _today = _date.fromisoformat(current_date) if current_date else _date.today()
+    _month_name = _today.strftime("%B")  # e.g. "April"
+    _month_es_map = {
+        1: "enero", 2: "febrero", 3: "marzo", 4: "abril", 5: "mayo", 6: "junio",
+        7: "julio", 8: "agosto", 9: "septiembre", 10: "octubre", 11: "noviembre", 12: "diciembre",
+    }
+    _month_es = _month_es_map[_today.month]
+    # Southern hemisphere seasons
+    _season_map = {
+        12: "verano", 1: "verano", 2: "verano",
+        3: "otoño", 4: "otoño", 5: "otoño",
+        6: "invierno", 7: "invierno", 8: "invierno",
+        9: "primavera", 10: "primavera", 11: "primavera",
+    }
+    _season = _season_map[_today.month]
+    _date_context = f"Fecha actual: {_today.isoformat()} ({_month_es}, {_season} en el hemisferio sur — Santiago, Chile)"
+
     wf = WorkflowRunner(
         "newsletter",
         f"Edición #{issue_number} — {focus_commune}",
@@ -82,30 +103,39 @@ def run_newsletter(
 
 {_BUSINESS_CONTEXT}
 
+{_date_context}
+
 Esta edición (#{issue_number}) tiene foco en la comuna de {focus_commune}.
 
 Genera el contenido específico para cada sección. Tono: cálido, positivo y práctico — sin política, sin controversia, solo contenido útil y divertido para dueños de perros santiaguinos.
+
+REGLAS ANTI-ALUCINACIÓN — MUY IMPORTANTE:
+1. LUGAR: Solo menciona espacios públicos conocidos (parques, plazas, riberas) o lugares donde tengas alta certeza de que existen y aceptan perros. Nunca inventes nombres de cafés ni direcciones. Si no conoces un lugar concreto verificado, usa un parque conocido (Parque Bustamante, Parque Bicentenario, Parque Intercomunal, Plaza Ñuñoa, etc.). La descripción debe ser del espacio, no del local.
+2. EVENTO: No inventes eventos con horarios específicos. En su lugar, sugiere una ACTIVIDAD (ej: "paseo matutino por el circuito de praderas del Parque X") sin afirmar que existe un meetup organizado con hora fija.
+3. TIP: El tip debe ser 100% aplicable a la estación actual ({_season}) en Santiago. No mezcles estaciones ni menciones meses distintos al actual ({_month_es}).
+4. DATO CURIOSO: Solo incluye un dato si conoces la fuente real y verificable. Si no estás seguro, omite el campo o usa "dato_curioso": "" en el JSON.
 
 Retorna SOLO un JSON con esta estructura exacta:
 
 {{
   "lugar": {{
-    "nombre": "Nombre real o verosímil de un café, parque o espacio dog-friendly en Santiago (preferiblemente cerca de {focus_commune})",
-    "descripcion": "2-3 oraciones concretas: si tiene agua para perros, sombra, espacio para correr, si el local tiene bowl de agua, si es tranquilo, etc.",
-    "direccion": "Dirección o intersección aproximada",
-    "por_que": "Una frase corta tipo 'ideal para después del baño del sábado'"
+    "nombre": "Nombre de un parque, plaza o espacio verde público reconocido cerca de {focus_commune} que sea pet-friendly",
+    "descripcion": "2-3 oraciones concretas sobre el espacio: sombra, caminos, zonas de pasto, acceso a agua, ambiente.",
+    "direccion": "Solo indica la comuna y el nombre del parque. NUNCA inventes calles o intersecciones específicas — solo escribe algo como 'Parque Bustamante, Providencia'.",
+    "por_que": "Una frase corta tipo 'ideal para el paseo del fin de semana'",
+    "disclaimer": "Recomendamos verificar horarios y condiciones antes de visitar."
   }},
   "evento": {{
-    "nombre": "Nombre de un evento, meetup o actividad dog-friendly en Santiago este mes",
-    "descripcion": "2 oraciones sobre el evento",
-    "cuando": "Día y hora aproximada (ej: 'Sábados 10:00–12:00')",
-    "donde": "Lugar o barrio"
+    "nombre": "Actividad recomendada para esta semana en {focus_commune} (NO un evento con horario inventado)",
+    "descripcion": "2 oraciones describiendo la actividad sugerida y por qué es buena en {_season}",
+    "cuando": "Horario general sugerido (ej: 'mañanas de fin de semana, antes de las 11:00') — no afirmar que hay un meetup organizado",
+    "donde": "Lugar o parque sugerido"
   }},
   "tip": {{
-    "titulo": "Título del tip semanal (máx 60 caracteres, accionable)",
-    "contenido": "3-4 oraciones de consejo práctico sobre cuidado canino relevante para Santiago (calor de verano, smog, pelaje, hidratación, paseos). Menciona de forma natural cuándo el grooming profesional ayuda."
+    "titulo": "Título del tip semanal para {_season} en Santiago (máx 60 caracteres, accionable)",
+    "contenido": "3-4 oraciones de consejo práctico sobre cuidado canino relevante para {_season} en Santiago. Menciona de forma natural cuándo el grooming profesional ayuda."
   }},
-  "dato_curioso": "Un dato curioso o estadística sobre perros o cultura pet-friendly en Chile (1-2 oraciones, con fuente estimada si aplica)"
+  "dato_curioso": "SOLO si tienes certeza de la fuente: un dato verificable sobre perros en Chile. Si no, deja este campo vacío ('')."
 }}""",
         )
 
@@ -164,12 +194,17 @@ Retorna SOLO las 5 líneas, una por línea, sin numeración ni explicación.""",
 
         oferta_text, oferta_slug = _OFERTAS[issue_number % len(_OFERTAS)]
 
+        disclaimer_lugar = lugar.get("disclaimer", "Recomendamos verificar horarios y condiciones antes de visitar.")
+
         draft = wf.run_step(
             step_name  = "newsletter_draft",
             agent_name = "copywriting",
             model      = model,
             prompt     = f"""Ensambla el borrador completo de la edición #{issue_number} de "{_NEWSLETTER_NAME}".
 Tagline: {_NEWSLETTER_TAGLINE} — by WashDog
+
+{_date_context}
+IMPORTANTE: Todos los tips y referencias climáticas/estacionales deben corresponder a {_season} en Santiago. No menciones otras estaciones ni meses distintos a {_month_es}.
 
 Usa este contenido curado:
 
@@ -178,6 +213,7 @@ LUGAR DOG-FRIENDLY SEMANAL:
 - Descripción: {lugar.get('descripcion')}
 - Dirección: {lugar.get('direccion')}
 - Por qué ir: {lugar.get('por_que')}
+- Disclaimer (incluir al pie de esta sección en cursiva): {disclaimer_lugar}
 
 EVENTO / ACTIVIDAD:
 - Nombre: {evento.get('nombre')}
@@ -189,7 +225,7 @@ TIP DE LA SEMANA:
 - Título: {tip.get('titulo')}
 - Contenido: {tip.get('contenido')}
 
-DATO CURIOSO: {dato}
+DATO CURIOSO: {dato if dato else "[omitir esta sección — no hay dato verificado esta edición]"}
 
 OFERTA WASHDOG DE LA SEMANA: {oferta_text}
 URL: https://www.washdog.cl/servicios/{oferta_slug}
